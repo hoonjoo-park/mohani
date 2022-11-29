@@ -7,22 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB0264B4293613B200650F51 /* mohani.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CB0264B2293613B200650F51 /* mohani.xcdatamodeld */; };
+		CB609263293610E9008E79F9 /* TodoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB609262293610E9008E79F9 /* TodoListVC.swift */; };
+		CB6092652936110F008E79F9 /* TodoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6092642936110F008E79F9 /* TodoDetailVC.swift */; };
 		CBC281DF292A82C600B2C144 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC281DE292A82C600B2C144 /* AppDelegate.swift */; };
 		CBC281E1292A82C600B2C144 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC281E0292A82C600B2C144 /* SceneDelegate.swift */; };
 		CBC281E3292A82C600B2C144 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC281E2292A82C600B2C144 /* ViewController.swift */; };
-		CBC281E6292A82C600B2C144 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBC281E4292A82C600B2C144 /* Main.storyboard */; };
-		CBC281E9292A82C600B2C144 /* mohani.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CBC281E7292A82C600B2C144 /* mohani.xcdatamodeld */; };
 		CBC281EB292A82C800B2C144 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBC281EA292A82C800B2C144 /* Assets.xcassets */; };
 		CBC281EE292A82C800B2C144 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBC281EC292A82C800B2C144 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB0264B3293613B200650F51 /* mohani.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mohani.xcdatamodel; sourceTree = "<group>"; };
+		CB609262293610E9008E79F9 /* TodoListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListVC.swift; sourceTree = "<group>"; };
+		CB6092642936110F008E79F9 /* TodoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailVC.swift; sourceTree = "<group>"; };
 		CBC281DB292A82C600B2C144 /* mohani.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mohani.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBC281DE292A82C600B2C144 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBC281E0292A82C600B2C144 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CBC281E2292A82C600B2C144 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		CBC281E5292A82C600B2C144 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CBC281E8292A82C600B2C144 /* mohani.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mohani.xcdatamodel; sourceTree = "<group>"; };
 		CBC281EA292A82C800B2C144 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBC281ED292A82C800B2C144 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBC281EF292A82C800B2C144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,6 +41,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB60925F29360FE3008E79F9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CB609262293610E9008E79F9 /* TodoListVC.swift */,
+				CB6092642936110F008E79F9 /* TodoDetailVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		CB60926029360FEC008E79F9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CB60926129360FEF008E79F9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		CBC281D2292A82C600B2C144 = {
 			isa = PBXGroup;
 			children = (
@@ -58,16 +83,26 @@
 		CBC281DD292A82C600B2C144 /* mohani */ = {
 			isa = PBXGroup;
 			children = (
+				CBC281F5292A84B700B2C144 /* App */,
+				CB60926129360FEF008E79F9 /* Model */,
+				CB60926029360FEC008E79F9 /* View */,
+				CB60925F29360FE3008E79F9 /* Controller */,
+			);
+			path = mohani;
+			sourceTree = "<group>";
+		};
+		CBC281F5292A84B700B2C144 /* App */ = {
+			isa = PBXGroup;
+			children = (
 				CBC281DE292A82C600B2C144 /* AppDelegate.swift */,
 				CBC281E0292A82C600B2C144 /* SceneDelegate.swift */,
 				CBC281E2292A82C600B2C144 /* ViewController.swift */,
-				CBC281E4292A82C600B2C144 /* Main.storyboard */,
 				CBC281EA292A82C800B2C144 /* Assets.xcassets */,
 				CBC281EC292A82C800B2C144 /* LaunchScreen.storyboard */,
 				CBC281EF292A82C800B2C144 /* Info.plist */,
-				CBC281E7292A82C600B2C144 /* mohani.xcdatamodeld */,
+				CB0264B2293613B200650F51 /* mohani.xcdatamodeld */,
 			);
-			path = mohani;
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,7 +165,6 @@
 			files = (
 				CBC281EE292A82C800B2C144 /* LaunchScreen.storyboard in Resources */,
 				CBC281EB292A82C800B2C144 /* Assets.xcassets in Resources */,
-				CBC281E6292A82C600B2C144 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,24 +175,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB609263293610E9008E79F9 /* TodoListVC.swift in Sources */,
 				CBC281E3292A82C600B2C144 /* ViewController.swift in Sources */,
 				CBC281DF292A82C600B2C144 /* AppDelegate.swift in Sources */,
 				CBC281E1292A82C600B2C144 /* SceneDelegate.swift in Sources */,
-				CBC281E9292A82C600B2C144 /* mohani.xcdatamodeld in Sources */,
+				CB6092652936110F008E79F9 /* TodoDetailVC.swift in Sources */,
+				CB0264B4293613B200650F51 /* mohani.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		CBC281E4292A82C600B2C144 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CBC281E5292A82C600B2C144 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		CBC281EC292A82C800B2C144 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -293,12 +321,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TQX48B3375;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = mohani/Info.plist;
+				INFOPLIST_FILE = mohani/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -321,12 +348,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TQX48B3375;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = mohani/Info.plist;
+				INFOPLIST_FILE = mohani/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -364,12 +390,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		CBC281E7292A82C600B2C144 /* mohani.xcdatamodeld */ = {
+		CB0264B2293613B200650F51 /* mohani.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CBC281E8292A82C600B2C144 /* mohani.xcdatamodel */,
+				CB0264B3293613B200650F51 /* mohani.xcdatamodel */,
 			);
-			currentVersion = CBC281E8292A82C600B2C144 /* mohani.xcdatamodel */;
+			currentVersion = CB0264B3293613B200650F51 /* mohani.xcdatamodel */;
 			path = mohani.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
