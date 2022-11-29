@@ -15,18 +15,88 @@ class TodoDetailVC: UIViewController {
     var today = Date().toYearMonthDate()
     var isTodoNew = true
     
+    let scrollView = UIScrollView()
+    let progressView = UIView()
+    let tableTitleLabel = UILabel()
+    let tableView = UITableView()
+    let addTaskButton = UIButton()
+    var UIViews: [UIView] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = today
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
         fetchTodoInfo(date: today)
         fetchTasks(date: today)
+        
+        configureViewController()
+        configureTableView()
+        configureUI()
     }
     
     
-    func fetchTodoInfo(date: String) {
+    private func configureViewController() {
+        view.backgroundColor = .systemBackground
+        navigationItem.title = today
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    
+    private func configureTableView() {
+        tableView.rowHeight = 50
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.reuseId)
+    }
+    
+    
+    private func configureUI() {
+        view.addSubview(scrollView)
+        scrollView.addSubviews(progressView ,tableTitleLabel, tableView, addTaskButton)
+        
+        scrollView.pinToEdges(superView: view)
+        add(childVC: ProgressVC(tasks: tasks), containerView: progressView)
+        
+        UIViews = [progressView, tableTitleLabel, tableView, addTaskButton]
+        
+        tableTitleLabel.text = "Todo"
+        addTaskButton.backgroundColor = .blue
+        addTaskButton.layer.cornerRadius = 50
+        
+        for view in UIViews {
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let padding: CGFloat = 20
+        
+        NSLayoutConstraint.activate([
+            progressView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 50),
+            progressView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
+            progressView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
+            
+            tableTitleLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 40),
+            tableTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
+            
+            tableView.topAnchor.constraint(equalTo: tableTitleLabel.bottomAnchor, constant: 15),
+            tableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
+            tableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
+            
+            addTaskButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
+            addTaskButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding),
+            addTaskButton.widthAnchor.constraint(equalToConstant: 60),
+            addTaskButton.heightAnchor.constraint(equalToConstant: 60),
+        ])
+    }
+    
+    
+    private func add(childVC: UIViewController, containerView: UIView) {
+        addChild(childVC)
+        containerView.addSubview(childVC.view)
+        childVC.view.frame = containerView.bounds
+        childVC.didMove(toParent: self)
+    }
+    
+    
+    private func fetchTodoInfo(date: String) {
         let fetchRequest = TodoList.fetchRequest() as NSFetchRequest<TodoList>
         let predicate = NSPredicate(format: "createdAt == %@", date)
         fetchRequest.predicate = predicate
@@ -52,7 +122,7 @@ class TodoDetailVC: UIViewController {
     }
 
     
-    func fetchTasks(date: String) {
+    private func fetchTasks(date: String) {
         guard !self.isTodoNew else { return }
         
         let fetchRequest = Task.fetchRequest() as NSFetchRequest<Task>
@@ -65,7 +135,10 @@ class TodoDetailVC: UIViewController {
             guard tasks.count > 0 else { return }
             
             self.tasks = tasks
-            // TODO: 테이블뷰 데이터 갱신
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
         catch {
             // TODO: 에러 핸들링 로직 추가 필요
@@ -75,11 +148,16 @@ class TodoDetailVC: UIViewController {
     
 }
 
-// 1. 해당 뷰컨트롤러에 필요한 View 정의하기
-    // 스크롤뷰, ProgressInfoView, todoLabel,tableView, tableViewCell, addTaskButton
-// 2. TodoInfo를 fetch하는 함수 작성
-// 3. 있으면 ? -> createdAt을 title로 세팅, 그리고 그에 따른 fetchTasks 진행
-// 4. 없으면 ? -> createdAt의 포멧을 "YYYY.MM.DD" 형식으로 변환하여 데이터 생성(Create)
-// 5. fetchTasks 후 -> 데이터를 통해 뷰 그려주기
-// 6. Task들이 들어갈 테이블 뷰 생성하기 (Delegate 및 DataSource 설정 포함)
-// 7. 각 UIView의 레이아웃 잡기
+extension TodoDetailVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TaskCell.reuseId) as! TaskCell
+        let task = tasks[indexPath.row]
+        cell.setCell(task: task)
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tasks.count
+    }
+}
