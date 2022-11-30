@@ -18,6 +18,8 @@
 		CB6092652936110F008E79F9 /* TodoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6092642936110F008E79F9 /* TodoDetailVC.swift */; };
 		CB6CC85029374FBA00134993 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC84F29374FBA00134993 /* UIColor+Ext.swift */; };
 		CB6CC853293750AB00134993 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC852293750AB00134993 /* UIHelper.swift */; };
+		CB6CC8552937597800134993 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC8542937597800134993 /* TitleLabel.swift */; };
+		CB6CC8572937598800134993 /* BodyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC8562937598800134993 /* BodyLabel.swift */; };
 		CBC281DF292A82C600B2C144 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC281DE292A82C600B2C144 /* AppDelegate.swift */; };
 		CBC281E1292A82C600B2C144 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC281E0292A82C600B2C144 /* SceneDelegate.swift */; };
 		CBC281EB292A82C800B2C144 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBC281EA292A82C800B2C144 /* Assets.xcassets */; };
@@ -36,6 +38,8 @@
 		CB6092642936110F008E79F9 /* TodoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailVC.swift; sourceTree = "<group>"; };
 		CB6CC84F29374FBA00134993 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		CB6CC852293750AB00134993 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		CB6CC8542937597800134993 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
+		CB6CC8562937598800134993 /* BodyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyLabel.swift; sourceTree = "<group>"; };
 		CBC281DB292A82C600B2C144 /* mohani.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mohani.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBC281DE292A82C600B2C144 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBC281E0292A82C600B2C144 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +74,7 @@
 			children = (
 				CB609262293610E9008E79F9 /* TodoListVC.swift */,
 				CB6092642936110F008E79F9 /* TodoDetailVC.swift */,
+				CB0264C42936865100650F51 /* ProgressVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -78,7 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				CB0264C22936808D00650F51 /* TaskCell.swift */,
-				CB0264C42936865100650F51 /* ProgressVC.swift */,
+				CB6CC8542937597800134993 /* TitleLabel.swift */,
+				CB6CC8562937598800134993 /* BodyLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -223,6 +229,8 @@
 				CB0264BB29361B1E00650F51 /* TodoList+CoreDataClass.swift in Sources */,
 				CB0264C32936808D00650F51 /* TaskCell.swift in Sources */,
 				CB6CC85029374FBA00134993 /* UIColor+Ext.swift in Sources */,
+				CB6CC8552937597800134993 /* TitleLabel.swift in Sources */,
+				CB6CC8572937598800134993 /* BodyLabel.swift in Sources */,
 				CB0264B4293613B200650F51 /* mohani.xcdatamodeld in Sources */,
 				CB0264C52936865100650F51 /* ProgressVC.swift in Sources */,
 			);

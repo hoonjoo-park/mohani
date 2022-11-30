@@ -16,7 +16,7 @@ class TodoDetailVC: UIViewController {
     var isTodoNew = true
     
     let progressView = UIView()
-    let tableTitleLabel = UILabel()
+    let tableTitleLabel = TitleLabel(color: Colors.black)
     let tableView = UITableView()
     let addTaskButton = UIButton()
     var UIViews: [UIView] = []
@@ -29,6 +29,7 @@ class TodoDetailVC: UIViewController {
         fetchTasks(date: today)
         
         configureViewController()
+        configureProgressView()
         configureTableView()
         configureAddTaskButton()
         configureUI()
@@ -41,6 +42,17 @@ class TodoDetailVC: UIViewController {
         view.backgroundColor = Colors.blueWhite
         navigationItem.leftBarButtonItem = listButton
         navigationItem.leftBarButtonItem?.tintColor = Colors.black
+    }
+    
+    
+    private func configureProgressView() {
+        add(childVC: ProgressVC(title: today, tasks: tasks), containerView: progressView)
+        
+        let shadowColor = Colors.black.cgColor
+        progressView.layer.shadowColor = shadowColor
+        progressView.layer.shadowOpacity = 0.15
+        progressView.layer.shadowOffset = .zero
+        progressView.layer.shadowRadius = 10
     }
     
     
@@ -61,8 +73,6 @@ class TodoDetailVC: UIViewController {
     
     private func configureUI() {
         let padding: CGFloat = 20
-        
-        add(childVC: ProgressVC(tasks: tasks), containerView: progressView)
         view.addSubviews(progressView ,tableTitleLabel, tableView, addTaskButton)
         
         tableTitleLabel.text = "Todo"
