@@ -1,5 +1,5 @@
 //
-//  AddTaskButton.swift
+//  PlusButton.swift
 //  mohani
 //
 //  Created by Hoonjoo Park on 2022/11/30.
@@ -7,7 +7,8 @@
 
 import UIKit
 
-class AddTaskButton: UIButton {
+class PlusButton: UIButton {
+    var plusImage = UIImage(systemName: "plus")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,19 +26,18 @@ class AddTaskButton: UIButton {
         
         layer.shadowColor = Colors.blue.cgColor
         layer.shadowOffset = .zero
-        layer.shadowRadius = 10
-        layer.shadowOpacity = 0.20
+        layer.shadowRadius = 15
+        layer.shadowOpacity = 0.30
         
         configuration = .filled()
-        configuration?.title = "추가"
+        configuration?.image = plusImage
         configuration?.baseBackgroundColor = Colors.blue
         configuration?.baseForegroundColor = Colors.white
         configuration?.cornerStyle = .capsule
         
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: 150),
-            heightAnchor.constraint(equalToConstant: 40),
+            widthAnchor.constraint(equalToConstant: 60),
+            heightAnchor.constraint(equalToConstant: 60),
         ])
     }
-
 }

@@ -18,7 +18,7 @@ class TodoDetailVC: UIViewController {
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
     let tableView = UITableView()
-    let addTaskButton = AddTaskButton(frame: .zero)
+    let addTaskButton = PlusButton(frame: .zero)
     var UIViews: [UIView] = []
     
     
@@ -170,7 +170,7 @@ class TodoDetailVC: UIViewController {
         if let bottomSheet = TaskInputVC.sheetPresentationController {
             bottomSheet.detents = [.custom(resolver: { context in
                 return 600
-            })]
+            }), .large()]
             bottomSheet.prefersGrabberVisible = true
         }
         
