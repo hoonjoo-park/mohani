@@ -18,7 +18,7 @@ class TodoDetailVC: UIViewController {
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
     let tableView = UITableView()
-    let addTaskButton = UIButton()
+    let addTaskButton = AddTaskButton(frame: .zero)
     var UIViews: [UIView] = []
     
     
@@ -65,8 +65,6 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureAddTaskButton() {
-        addTaskButton.backgroundColor = Colors.blue
-        addTaskButton.layer.cornerRadius = 30
         addTaskButton.addTarget(self, action: #selector(onTappedAddTaskButton), for: .touchUpInside)
     }
     
@@ -97,8 +95,6 @@ class TodoDetailVC: UIViewController {
             
             addTaskButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             addTaskButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding),
-            addTaskButton.widthAnchor.constraint(equalToConstant: 60),
-            addTaskButton.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
     
@@ -168,7 +164,17 @@ class TodoDetailVC: UIViewController {
     
     
     @objc func onTappedAddTaskButton() {
-        // TODO: Bottom Modal 열리는 로직 구현 필요
+        let TaskInputVC = TaskInputVC()
+        TaskInputVC.modalPresentationStyle = .pageSheet
+        
+        if let bottomSheet = TaskInputVC.sheetPresentationController {
+            bottomSheet.detents = [.custom(resolver: { context in
+                return 600
+            })]
+            bottomSheet.prefersGrabberVisible = true
+        }
+        
+        present(TaskInputVC, animated: true)
         return
     }
 }
