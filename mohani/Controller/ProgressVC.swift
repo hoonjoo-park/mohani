@@ -56,14 +56,14 @@ class ProgressVC: UIViewController {
     
     
     func configureProgressBar() {
-        progressBar.layer.cornerRadius = 10
+        progressBar.layer.cornerRadius = 7.5
         progressBar.backgroundColor = Colors.blueWhite
         progressBar.translatesAutoresizingMaskIntoConstraints = false
     }
     
     
     func configureColoredProgressBar() {
-        coloredProgressBar.layer.cornerRadius = 10
+        coloredProgressBar.layer.cornerRadius = 7.5
         coloredProgressBar.backgroundColor = Colors.blue
         coloredProgressBar.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -71,7 +71,7 @@ class ProgressVC: UIViewController {
     
     func configureUI() {
         let padding:CGFloat = 20
-        let multiplier:CGFloat = totalTaskCount == 0 ? 0 : CGFloat(doneTaskCount/totalTaskCount)
+        let percentage:CGFloat = totalTaskCount == 0 ? 0 : Double(doneTaskCount) / Double(totalTaskCount)
         
         view.addSubviews(titleLabel, progressLabel, progressBar, coloredProgressBar)
         
@@ -91,7 +91,7 @@ class ProgressVC: UIViewController {
             coloredProgressBar.topAnchor.constraint(equalTo: progressBar.topAnchor),
             coloredProgressBar.leadingAnchor.constraint(equalTo: progressBar.leadingAnchor),
             coloredProgressBar.heightAnchor.constraint(equalToConstant: 15),
-            coloredProgressBar.widthAnchor.constraint(equalTo: progressBar.widthAnchor, multiplier: multiplier)
+            coloredProgressBar.widthAnchor.constraint(equalTo: progressBar.widthAnchor, multiplier: percentage)
         ])
     }
 }
