@@ -15,12 +15,12 @@ class TodoDetailVC: UIViewController {
     var today = Date().toYearMonthDate()
     var isTodoNew = true
     
-    let scrollView = UIScrollView()
     let progressView = UIView()
     let tableTitleLabel = UILabel()
     let tableView = UITableView()
     let addTaskButton = UIButton()
     var UIViews: [UIView] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +30,17 @@ class TodoDetailVC: UIViewController {
         
         configureViewController()
         configureTableView()
+        configureAddTaskButton()
         configureUI()
     }
     
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
-        navigationItem.title = today
-        navigationController?.navigationBar.prefersLargeTitles = true
+        let listButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(onTappedListButton))
+        
+        view.backgroundColor = Colors.blueWhite
+        navigationItem.leftBarButtonItem = listButton
+        navigationItem.leftBarButtonItem?.tintColor = Colors.black
     }
     
     
@@ -49,39 +52,41 @@ class TodoDetailVC: UIViewController {
     }
     
     
+    private func configureAddTaskButton() {
+        addTaskButton.backgroundColor = Colors.blue
+        addTaskButton.layer.cornerRadius = 30
+        addTaskButton.addTarget(self, action: #selector(onTappedAddTaskButton), for: .touchUpInside)
+    }
+    
+    
     private func configureUI() {
-        view.addSubview(scrollView)
-        scrollView.addSubviews(progressView ,tableTitleLabel, tableView, addTaskButton)
+        let padding: CGFloat = 20
         
-        scrollView.pinToEdges(superView: view)
         add(childVC: ProgressVC(tasks: tasks), containerView: progressView)
-        
-        UIViews = [progressView, tableTitleLabel, tableView, addTaskButton]
+        view.addSubviews(progressView ,tableTitleLabel, tableView, addTaskButton)
         
         tableTitleLabel.text = "Todo"
-        addTaskButton.backgroundColor = .blue
-        addTaskButton.layer.cornerRadius = 50
         
+        UIViews = [progressView, tableTitleLabel, tableView, addTaskButton]
         for view in UIViews {
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        let padding: CGFloat = 20
-        
         NSLayoutConstraint.activate([
-            progressView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 50),
-            progressView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
-            progressView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            progressView.heightAnchor.constraint(equalToConstant: 130),
             
             tableTitleLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 40),
-            tableTitleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
+            tableTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             
             tableView.topAnchor.constraint(equalTo: tableTitleLabel.bottomAnchor, constant: 15),
-            tableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: padding),
-            tableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             
-            addTaskButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -padding),
-            addTaskButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding),
+            addTaskButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            addTaskButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding),
             addTaskButton.widthAnchor.constraint(equalToConstant: 60),
             addTaskButton.heightAnchor.constraint(equalToConstant: 60),
         ])
@@ -146,6 +151,16 @@ class TodoDetailVC: UIViewController {
     }
     
     
+    @objc func onTappedListButton() {
+        // TODO: TodoListVC로 네비게이션 이동되는 로직 구현 필요
+        return
+    }
+    
+    
+    @objc func onTappedAddTaskButton() {
+        // TODO: Bottom Modal 열리는 로직 구현 필요
+        return
+    }
 }
 
 extension TodoDetailVC: UITableViewDelegate, UITableViewDataSource {
@@ -156,6 +171,7 @@ extension TodoDetailVC: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
