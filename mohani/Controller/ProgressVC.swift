@@ -50,7 +50,7 @@ class ProgressVC: UIViewController {
     
     
     func configureViewController() {
-        view.backgroundColor = .white
+        view.backgroundColor = Colors.white
         view.layer.cornerRadius = 10
     }
     
@@ -78,14 +78,13 @@ class ProgressVC: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             
             progressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
             progressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             
             progressBar.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: 15),
             progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            progressBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            progressBar.trailingAnchor.constraint(equalTo: progressLabel.trailingAnchor),
             progressBar.heightAnchor.constraint(equalToConstant: 15),
 
             coloredProgressBar.topAnchor.constraint(equalTo: progressBar.topAnchor),

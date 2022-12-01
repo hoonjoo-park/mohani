@@ -9,11 +9,13 @@ import UIKit
 import CoreData
 
 class TodoDetailVC: UIViewController {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    enum Section { case main }
+    
     var todoInfo: TodoList? = nil
     var tasks: [Task] = []
     var today = Date().toYearMonthDate()
     var isTodoNew = true
+    var dataSource: UITableViewDiffableDataSource<Section, Task>!
     
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
@@ -25,8 +27,8 @@ class TodoDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchTodoInfo(date: today)
-        fetchTasks(date: today)
+        configureTodoInfo(date: today)
+        configureTasks(date: today)
         
         configureViewController()
         configureProgressView()
@@ -107,53 +109,37 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func fetchTodoInfo(date: String) {
-        let fetchRequest = TodoList.fetchRequest() as NSFetchRequest<TodoList>
-        let predicate = NSPredicate(format: "createdAt == %@", date)
-        fetchRequest.predicate = predicate
+    private func configureTodoInfo(date: String) {
+        let todo = fetchTodoListInfo(date: today)
         
-        do {
-            let todo = try context.fetch(fetchRequest)
-
-            guard todo.count > 0 else {
-                let newTodoInfo = TodoList(context: context)
-                newTodoInfo.createdAt = date
-
-                self.todoInfo = newTodoInfo
-                try self.context.save()
-                return
-            }
-
-            todoInfo = todo[0]
-            isTodoNew = false
-        }
-        catch {
-            // TODO: 에러 핸들링 로직 추가 필요
-        }
+        guard todo.count > 0 else { return }
+        
+        todoInfo = todo[0]
+        isTodoNew = false
     }
 
     
-    private func fetchTasks(date: String) {
+    private func configureTasks(date: String) {
         guard !self.isTodoNew else { return }
+
+        let tasks = fetchTasks(date: today)
+
+        guard tasks.count > 0 else { return }
         
-        let fetchRequest = Task.fetchRequest() as NSFetchRequest<Task>
-        let predicate = NSPredicate(format: "createdAt == %@", date)
-        fetchRequest.predicate = predicate
+        self.tasks = tasks
         
-        do {
-            let tasks = try context.fetch(fetchRequest)
-            
-            guard tasks.count > 0 else { return }
-            
-            self.tasks = tasks
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.tableView.bringSubviewToFront(self.tableView)
         }
-        catch {
-            // TODO: 에러 핸들링 로직 추가 필요
-        }
+    }
+    
+    
+    private func updateTasks(tasks: [Task]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(tasks)
+        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
     }
     
     
@@ -166,6 +152,7 @@ class TodoDetailVC: UIViewController {
     @objc func onTappedAddTaskButton() {
         let TaskInputVC = TaskInputVC()
         TaskInputVC.modalPresentationStyle = .pageSheet
+        TaskInputVC.delegate = self
         
         if let bottomSheet = TaskInputVC.sheetPresentationController {
             bottomSheet.detents = [.custom(resolver: { context in
@@ -191,5 +178,14 @@ extension TodoDetailVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
+    }
+}
+
+
+extension TodoDetailVC: TaskInputVCDelegate {
+    func onAddTask(title: String) {
+        addTask(title: title, createdAt: today)
+        configureTasks(date: today)
+        return
     }
 }

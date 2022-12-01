@@ -40,18 +40,19 @@ class TaskCell: UITableViewCell {
     
     private func configureCellUI() {
         let shadowColor = Colors.black.cgColor
-        backgroundColor = Colors.white
-        layer.cornerRadius = 10
-        layer.shadowColor = shadowColor
-        layer.shadowRadius = 10
-        layer.shadowOffset = .zero
-        layer.shadowOpacity = 0.15
+        self.backgroundColor = Colors.white
+        self.layer.cornerRadius = 10
+        self.layer.shadowColor = shadowColor
+        self.layer.shadowRadius = 10
+        self.layer.shadowOffset = .zero
+        self.layer.shadowOpacity = 0.15
+        
+        addSubviews(checkBoxButton, bodyLabel)
     }
     
     
     private func configureUI() {
         let padding: CGFloat = 15
-        addSubviews(checkBoxButton, bodyLabel)
         
         NSLayoutConstraint.activate([
             checkBoxButton.centerYAnchor.constraint(equalTo: centerYAnchor),

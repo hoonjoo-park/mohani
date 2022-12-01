@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol TaskInputVCDelegate: AnyObject {
+    func onAddTask(title: String)
+}
+
 class TaskInputVC: UIViewController {
+    weak var delegate: TaskInputVCDelegate!
+    
     let textField = TaskTextField(placeholder: "오늘 할 일을 입력해 주세요.")
     let addButton = AddTaskButton(frame: .zero)
 
@@ -15,8 +21,15 @@ class TaskInputVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = Colors.white
+        configureAddButtonAction()
         configureUI()
     }
+    
+    
+    func configureAddButtonAction() {
+        addButton.addTarget(self, action: #selector(onAddButtonTapped), for: .touchUpInside)
+    }
+    
     
     private func configureUI() {
         let padding:CGFloat = 35
@@ -31,5 +44,14 @@ class TaskInputVC: UIViewController {
             addButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 55),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
         ])
+    }
+    
+    
+    @objc func onAddButtonTapped() {
+        guard let taskValue = textField.text, taskValue.count > 0 else { return }
+        guard delegate != nil else { return }
+        
+        delegate.onAddTask(title: taskValue)
+        return
     }
 }
