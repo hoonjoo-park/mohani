@@ -60,8 +60,11 @@ class TodoDetailVC: UIViewController {
     
     private func configureTableView() {
         tableView.rowHeight = 50
+        tableView.separatorColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = Colors.blueWhite
+        tableView.removeExcessCells()
         tableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.reuseId)
     }
     
@@ -92,6 +95,7 @@ class TodoDetailVC: UIViewController {
             tableTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             
             tableView.topAnchor.constraint(equalTo: tableTitleLabel.bottomAnchor, constant: 15),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             
