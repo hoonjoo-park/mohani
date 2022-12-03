@@ -10,8 +10,11 @@ import UIKit
 class TaskCell: UICollectionViewCell {
     static let reuseId = "TaskCell"
     
-    var checkBoxButton = UIButton()
+    var checkBoxButton = UIImageView()
     let bodyLabel = BodyLabel(color: Colors.black)
+    
+    var isDone: Bool!
+    var title: String!
     
     
     override init(frame: CGRect) {
@@ -28,14 +31,50 @@ class TaskCell: UICollectionViewCell {
     
     
     func setCell(task: Task) {
-        if task.isDone {
-            checkBoxButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected)
-        } else {
-            checkBoxButton.setImage(UIImage(systemName: "checkmark.circle.fillcirclebadge"), for: .normal)
-        }
+        self.isDone = task.isDone
+        self.title = task.title
         
-        bodyLabel.text = task.title
+        setCellByIsDone(isDone: task.isDone)
+        
+        checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(toggleCheckBox))
+        checkBoxButton.addGestureRecognizer(gestureRecognizer)
+        checkBoxButton.isUserInteractionEnabled = true
+        
         return
+    }
+    
+    
+    private func setCellByIsDone(isDone: Bool) {
+        if isDone {
+            checkBoxButton.image = UIImage(systemName: "checkmark.circle.fill")
+            addStrikethrough()
+        } else {
+            checkBoxButton.image = UIImage(systemName: "circle")
+            removeStrikethrough()
+        }
+    }
+    
+    
+    private func addStrikethrough() {
+        let attributedText = NSAttributedString(
+            string: self.title as String,
+            attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
+        )
+        bodyLabel.attributedText = attributedText
+    }
+    
+    
+    private func removeStrikethrough() {
+        let attributedText = NSAttributedString(string: self.title)
+        bodyLabel.attributedText = attributedText
+    }
+    
+    
+    @objc func toggleCheckBox() {
+        self.isDone = !isDone
+        setCellByIsDone(isDone: self.isDone)
     }
     
     
@@ -62,9 +101,8 @@ class TaskCell: UICollectionViewCell {
             checkBoxButton.heightAnchor.constraint(equalToConstant: 20),
             
             bodyLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            bodyLabel.leadingAnchor.constraint(equalTo: checkBoxButton.trailingAnchor, constant: 18),
+            bodyLabel.leadingAnchor.constraint(equalTo: checkBoxButton.trailingAnchor, constant: 10),
             bodyLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
         ])
     }
-
 }
