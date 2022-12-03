@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol TaskCellDelegate: AnyObject {
+    func onToggleIsDone(task: Task)
+}
+
 class TaskCell: UICollectionViewCell {
     static let reuseId = "TaskCell"
     
     var checkBoxButton = UIImageView()
+    var delegate: TaskCellDelegate!
     let bodyLabel = BodyLabel(color: Colors.black)
     
-    var isDone: Bool!
-    var title: String!
+    var task: Task!
     
     
     override init(frame: CGRect) {
@@ -31,12 +35,9 @@ class TaskCell: UICollectionViewCell {
     
     
     func setCell(task: Task) {
-        self.isDone = task.isDone
-        self.title = task.title
+        self.task = task
         
-        setCellByIsDone(isDone: task.isDone)
-        
-        checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
+        setCellData()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(toggleCheckBox))
         checkBoxButton.addGestureRecognizer(gestureRecognizer)
@@ -46,8 +47,8 @@ class TaskCell: UICollectionViewCell {
     }
     
     
-    private func setCellByIsDone(isDone: Bool) {
-        if isDone {
+    private func setCellData() {
+        if task.isDone {
             checkBoxButton.image = UIImage(systemName: "checkmark.circle.fill")
             addStrikethrough()
         } else {
@@ -59,7 +60,7 @@ class TaskCell: UICollectionViewCell {
     
     private func addStrikethrough() {
         let attributedText = NSAttributedString(
-            string: self.title as String,
+            string: self.task.title! as String,
             attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue]
         )
         bodyLabel.attributedText = attributedText
@@ -67,14 +68,16 @@ class TaskCell: UICollectionViewCell {
     
     
     private func removeStrikethrough() {
-        let attributedText = NSAttributedString(string: self.title)
+        let attributedText = NSAttributedString(string: self.task.title!)
         bodyLabel.attributedText = attributedText
     }
     
     
     @objc func toggleCheckBox() {
-        self.isDone = !isDone
-        setCellByIsDone(isDone: self.isDone)
+        self.task.isDone = !self.task.isDone
+        
+        delegate?.onToggleIsDone(task: task)
+        setCellData()
     }
     
     
@@ -87,6 +90,7 @@ class TaskCell: UICollectionViewCell {
         self.layer.shadowRadius = 3
         self.layer.shadowOpacity = 0.12
         
+        checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
         addSubviews(checkBoxButton, bodyLabel)
     }
     

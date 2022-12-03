@@ -40,6 +40,28 @@ class TodoDetailVC: UIViewController {
     }
     
     
+    private func configureTodoInfo(date: String) {
+        let todo = fetchTodoListInfo(date: today)
+        
+        guard todo.count > 0 else { return }
+        
+        todoInfo = todo[0]
+        isTodoNew = false
+    }
+
+    
+    private func configureTasks(date: String) {
+        guard !self.isTodoNew else { return }
+
+        let tasks = fetchTasks(date: today)
+
+        guard tasks.count > 0 else { return }
+        
+        self.tasks.append(contentsOf: tasks)
+        self.updateTasks(tasks: tasks)
+    }
+    
+    
     private func configureViewController() {
         let listButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(onTappedListButton))
         
@@ -72,6 +94,7 @@ class TodoDetailVC: UIViewController {
         dataSource = UICollectionViewDiffableDataSource<Section, Task>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
             cell.setCell(task: self.tasks[indexPath.row])
+            cell.delegate = self
             
             return cell
         })
@@ -122,28 +145,6 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func configureTodoInfo(date: String) {
-        let todo = fetchTodoListInfo(date: today)
-        
-        guard todo.count > 0 else { return }
-        
-        todoInfo = todo[0]
-        isTodoNew = false
-    }
-
-    
-    private func configureTasks(date: String) {
-        guard !self.isTodoNew else { return }
-
-        let tasks = fetchTasks(date: today)
-
-        guard tasks.count > 0 else { return }
-        
-        self.tasks.append(contentsOf: tasks)
-        self.updateTasks(tasks: tasks)
-    }
-    
-    
     private func updateTasks(tasks: [Task]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
         snapshot.appendSections([.main])
@@ -186,6 +187,14 @@ extension TodoDetailVC: TaskInputVCDelegate {
     func onAddTask(title: String) {
         addTask(title: title, createdAt: today)
         configureTasks(date: today)
+        return
+    }
+}
+
+
+extension TodoDetailVC: TaskCellDelegate {
+    func onToggleIsDone(task: Task) {
+        saveContext()
         return
     }
 }

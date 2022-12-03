@@ -11,9 +11,9 @@ import CoreData
 extension UIViewController {
     var context: NSManagedObjectContext { return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
     var fetchTodoListRequest: NSFetchRequest<TodoList> { return TodoList.fetchRequest() }
-    var fetchTasksRequest: NSFetchRequest<Task> { return Task.fetchRequest() }
     
     func fetchTasks(date: String) -> [Task] {
+        let fetchTasksRequest = Task.fetchRequest() as NSFetchRequest<Task>
         let predicate = NSPredicate(format: "createdAt == %@", date)
         fetchTasksRequest.predicate = predicate
         
@@ -62,6 +62,11 @@ extension UIViewController {
         newTask.createdAt = createdAt
         newTask.isDone = false
         
+        saveContext()
+    }
+    
+    
+    func saveContext() {
         do {
             try context.save()
         }
