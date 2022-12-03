@@ -7,15 +7,16 @@
 
 import UIKit
 
-class TaskCell: UITableViewCell {
+class TaskCell: UICollectionViewCell {
     static let reuseId = "TaskCell"
     
     var checkBoxButton = UIButton()
     let bodyLabel = BodyLabel(color: Colors.black)
     
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
         configureCellUI()
         configureUI()
     }
@@ -43,9 +44,9 @@ class TaskCell: UITableViewCell {
         self.backgroundColor = Colors.white
         self.layer.cornerRadius = 10
         self.layer.shadowColor = shadowColor
-        self.layer.shadowRadius = 10
-        self.layer.shadowOffset = .zero
-        self.layer.shadowOpacity = 0.15
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 3
+        self.layer.shadowOpacity = 0.12
         
         addSubviews(checkBoxButton, bodyLabel)
     }

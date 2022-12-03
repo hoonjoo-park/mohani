@@ -15,13 +15,14 @@ class TodoDetailVC: UIViewController {
     var tasks: [Task] = []
     var today = Date().toYearMonthDate()
     var isTodoNew = true
-    var dataSource: UITableViewDiffableDataSource<Section, Task>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, Task>!
     
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
-    let tableView = UITableView()
     let addTaskButton = PlusButton(frame: .zero)
+    var collectionView: UICollectionView!
     var UIViews: [UIView] = []
+    
     
     
     override func viewDidLoad() {
@@ -32,7 +33,8 @@ class TodoDetailVC: UIViewController {
         
         configureViewController()
         configureProgressView()
-        configureTableView()
+        configureCollectionView()
+        configureDataSource()
         configureAddTaskButton()
         configureUI()
     }
@@ -58,14 +60,21 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func configureTableView() {
-        tableView.rowHeight = 50
-        tableView.separatorColor = .clear
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = Colors.blueWhite
-        tableView.removeExcessCells()
-        tableView.register(TaskCell.self, forCellReuseIdentifier: TaskCell.reuseId)
+    private func configureCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createTaskCellLayout(view: view))
+        collectionView.delegate = self
+        collectionView.backgroundColor = Colors.blueWhite
+        collectionView.register(TaskCell.self, forCellWithReuseIdentifier: TaskCell.reuseId)
+    }
+    
+    
+    private func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Section, Task>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
+            cell.setCell(task: self.tasks[indexPath.row])
+            
+            return cell
+        })
     }
     
     
@@ -76,11 +85,11 @@ class TodoDetailVC: UIViewController {
     
     private func configureUI() {
         let padding: CGFloat = 20
-        view.addSubviews(progressView ,tableTitleLabel, tableView, addTaskButton)
+        view.addSubviews(progressView ,tableTitleLabel, collectionView, addTaskButton)
         
         tableTitleLabel.text = "Todo"
         
-        UIViews = [progressView, tableTitleLabel, tableView, addTaskButton]
+        UIViews = [progressView, tableTitleLabel, collectionView, addTaskButton]
         for view in UIViews {
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -94,10 +103,10 @@ class TodoDetailVC: UIViewController {
             tableTitleLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 40),
             tableTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             
-            tableView.topAnchor.constraint(equalTo: tableTitleLabel.bottomAnchor, constant: 15),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            collectionView.topAnchor.constraint(equalTo: tableTitleLabel.bottomAnchor, constant: 15),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             addTaskButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             addTaskButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding),
@@ -130,12 +139,8 @@ class TodoDetailVC: UIViewController {
 
         guard tasks.count > 0 else { return }
         
-        self.tasks = tasks
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.tableView.bringSubviewToFront(self.tableView)
-        }
+        self.tasks.append(contentsOf: tasks)
+        self.updateTasks(tasks: tasks)
     }
     
     
@@ -170,20 +175,11 @@ class TodoDetailVC: UIViewController {
     }
 }
 
-extension TodoDetailVC: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TaskCell.reuseId) as! TaskCell
-        let task = tasks[indexPath.row]
-        cell.setCell(task: task)
-        
-        return cell
-    }
+
+extension TodoDetailVC: UICollectionViewDelegate {
     
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
-    }
 }
+
 
 
 extension TodoDetailVC: TaskInputVCDelegate {

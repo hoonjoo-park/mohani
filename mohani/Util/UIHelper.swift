@@ -14,3 +14,20 @@ enum Colors {
     static let black = UIColor(r: 2, g: 4, b: 23)
     static let gray = UIColor(r: 165, g: 171, b: 195)
 }
+
+
+enum UIHelper {
+    static func createTaskCellLayout(view: UIView) -> UICollectionViewFlowLayout {
+        let width = view.bounds.width
+        let padding: CGFloat = 20
+        let itemSpacing: CGFloat = 5
+        let itemWidth = width - (padding * 2)
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsets(top: itemSpacing, left: 0, bottom: itemSpacing, right: 0)
+        flowLayout.itemSize = CGSize(width: itemWidth, height: 50)
+        
+        return flowLayout
+    }
+}
+ 
