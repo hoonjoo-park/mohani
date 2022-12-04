@@ -15,8 +15,7 @@ class ProgressVC: UIViewController {
     
     let titleLabel = TitleLabel(color: Colors.black)
     let progressLabel = TitleLabel(color: Colors.gray)
-    let progressBar = UIView()
-    let coloredProgressBar = UIView()
+    let progressBar = TaskProgressView(frame: .zero)
     
     
     init(title: String, tasks: [Task]) {
@@ -45,10 +44,10 @@ class ProgressVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         configureViewController()
-        configureProgressBar()
-        configureColoredProgressBar()
         configureUI()
+        setProgressValue()
     }
     
     
@@ -58,25 +57,17 @@ class ProgressVC: UIViewController {
     }
     
     
-    func configureProgressBar() {
-        progressBar.layer.cornerRadius = 7.5
-        progressBar.backgroundColor = Colors.blueWhite
-        progressBar.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    
-    func configureColoredProgressBar() {
-        coloredProgressBar.layer.cornerRadius = 7.5
-        coloredProgressBar.backgroundColor = Colors.blue
-        coloredProgressBar.translatesAutoresizingMaskIntoConstraints = false
+    func setProgressValue() {
+        let percentage:Float = Float(Double(doneTaskCount) / Double(totalTaskCount))
+        
+        progressBar.progress = percentage
     }
     
     
     func configureUI() {
         let padding:CGFloat = 20
-        let percentage:CGFloat = totalTaskCount == 0 ? 0 : Double(doneTaskCount) / Double(totalTaskCount)
         
-        view.addSubviews(titleLabel, progressLabel, progressBar, coloredProgressBar)
+        view.addSubviews(titleLabel, progressLabel, progressBar)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
@@ -89,11 +80,6 @@ class ProgressVC: UIViewController {
             progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             progressBar.trailingAnchor.constraint(equalTo: progressLabel.trailingAnchor),
             progressBar.heightAnchor.constraint(equalToConstant: 15),
-
-            coloredProgressBar.topAnchor.constraint(equalTo: progressBar.topAnchor),
-            coloredProgressBar.leadingAnchor.constraint(equalTo: progressBar.leadingAnchor),
-            coloredProgressBar.heightAnchor.constraint(equalToConstant: 15),
-            coloredProgressBar.widthAnchor.constraint(equalTo: progressBar.widthAnchor, multiplier: percentage)
         ])
     }
 }
@@ -103,7 +89,7 @@ extension ProgressVC: TodoDetailVCDelegate {
     func onChangeTask(tasks: [Task]) {
         DispatchQueue.main.async {
             self.configureProgressLabel(tasks: tasks)
-            self.configureColoredProgressBar()
+            self.setProgressValue()
             return
         }
     }
