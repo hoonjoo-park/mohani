@@ -62,7 +62,7 @@ class TodoDetailVC: UIViewController {
         guard tasks.count > 0 else { return }
         
         self.tasks = tasks
-        self.updateTasks(tasks: tasks)
+        self.updateTasks()
     }
     
     
@@ -151,11 +151,21 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func updateTasks(tasks: [Task]) {
+    private func updateTasks() {
+        guard self.tasks.count > 0 else { return }
+        
+        sortTasksByIsDone()
+        
         var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
+        
         snapshot.appendSections([.main])
-        snapshot.appendItems(tasks)
+        snapshot.appendItems(self.tasks)
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
+    }
+    
+    
+    func sortTasksByIsDone() {
+        tasks.sort(by: { !$0.isDone && $1.isDone })
     }
     
     
@@ -207,5 +217,7 @@ extension TodoDetailVC: TaskCellDelegate {
         
         saveContext()
         delegate.onChangeTask(tasks: tasks)
+        sortTasksByIsDone()
+        updateTasks()
     }
 }

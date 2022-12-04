@@ -78,7 +78,7 @@ class ProgressVC: UIViewController {
     
     
     func setProgressValue() {
-        let percentage:Float = Float(Double(doneTaskCount) / Double(totalTaskCount))
+        let percentage:Float = doneTaskCount == 0 ? 0 : Float(Double(doneTaskCount) / Double(totalTaskCount))
         
         progressBar.setProgress(percentage, animated: true)
     }
