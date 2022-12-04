@@ -54,20 +54,13 @@ class ProgressVC: UIViewController {
     func configureViewController() {
         view.backgroundColor = Colors.white
         view.layer.cornerRadius = 10
-    }
-    
-    
-    func setProgressValue() {
-        let percentage:Float = Float(Double(doneTaskCount) / Double(totalTaskCount))
         
-        progressBar.progress = percentage
+        view.addSubviews(titleLabel, progressLabel, progressBar)
     }
     
     
     func configureUI() {
         let padding:CGFloat = 20
-        
-        view.addSubviews(titleLabel, progressLabel, progressBar)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
@@ -81,6 +74,13 @@ class ProgressVC: UIViewController {
             progressBar.trailingAnchor.constraint(equalTo: progressLabel.trailingAnchor),
             progressBar.heightAnchor.constraint(equalToConstant: 15),
         ])
+    }
+    
+    
+    func setProgressValue() {
+        let percentage:Float = Float(Double(doneTaskCount) / Double(totalTaskCount))
+        
+        progressBar.setProgress(percentage, animated: true)
     }
 }
 
