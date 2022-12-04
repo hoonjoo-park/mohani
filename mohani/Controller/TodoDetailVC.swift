@@ -6,14 +6,18 @@
 //
 
 import UIKit
-import CoreData
+
+protocol TodoDetailVCDelegate: AnyObject {
+    func onChangeTask(tasks: [Task])
+}
 
 class TodoDetailVC: UIViewController {
     enum Section { case main }
     
+    weak var delegate: TodoDetailVCDelegate!
     var todoInfo: TodoList? = nil
     var tasks: [Task] = []
-    var today = Date().toYearMonthDate()
+    var currentDate = Date().toYearMonthDate()
     var isTodoNew = true
     var dataSource: UICollectionViewDiffableDataSource<Section, Task>!
     
@@ -28,8 +32,8 @@ class TodoDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureTodoInfo(date: today)
-        configureTasks(date: today)
+        configureTodoInfo(date: currentDate)
+        configureTasks(date: currentDate)
         
         configureViewController()
         configureProgressView()
@@ -41,7 +45,7 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureTodoInfo(date: String) {
-        let todo = fetchTodoListInfo(date: today)
+        let todo = fetchTodoListInfo(date: currentDate)
         
         guard todo.count > 0 else { return }
         
@@ -53,11 +57,11 @@ class TodoDetailVC: UIViewController {
     private func configureTasks(date: String) {
         guard !self.isTodoNew else { return }
 
-        let tasks = fetchTasks(date: today)
+        let tasks = fetchTasks(date: currentDate)
 
         guard tasks.count > 0 else { return }
         
-        self.tasks.append(contentsOf: tasks)
+        self.tasks = tasks
         self.updateTasks(tasks: tasks)
     }
     
@@ -72,7 +76,9 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureProgressView() {
-        add(childVC: ProgressVC(title: today, tasks: tasks), containerView: progressView)
+        let progressVC = ProgressVC(title: currentDate, tasks: tasks)
+        add(childVC: progressVC, containerView: progressView)
+        self.delegate = progressVC
         
         let shadowColor = Colors.black.cgColor
         progressView.layer.shadowColor = shadowColor
@@ -185,8 +191,11 @@ extension TodoDetailVC: UICollectionViewDelegate {
 
 extension TodoDetailVC: TaskInputVCDelegate {
     func onAddTask(title: String) {
-        addTask(title: title, createdAt: today)
-        configureTasks(date: today)
+        guard delegate != nil else { return }
+        
+        addTask(title: title, createdAt: currentDate)
+        configureTasks(date: currentDate)
+        delegate.onChangeTask(tasks: tasks)
         return
     }
 }
@@ -194,7 +203,9 @@ extension TodoDetailVC: TaskInputVCDelegate {
 
 extension TodoDetailVC: TaskCellDelegate {
     func onToggleIsDone(task: Task) {
+        guard delegate != nil else { return }
+        
         saveContext()
-        return
+        delegate.onChangeTask(tasks: tasks)
     }
 }

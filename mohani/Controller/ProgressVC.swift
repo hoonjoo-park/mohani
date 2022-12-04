@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol ProgressVCDelegate: AnyObject {
-    func onChangeTask(tasks: [Task])
-}
-
 class ProgressVC: UIViewController {
     
     var tasks: [Task]!
@@ -28,6 +24,13 @@ class ProgressVC: UIViewController {
         
         self.tasks = tasks
         titleLabel.text = title
+        
+        configureProgressLabel(tasks: tasks)
+    }
+    
+    
+    private func configureProgressLabel(tasks: [Task]) {
+        self.tasks = tasks
         
         totalTaskCount = tasks.count
         doneTaskCount = (tasks.filter { $0.isDone == true }).count
@@ -92,5 +95,16 @@ class ProgressVC: UIViewController {
             coloredProgressBar.heightAnchor.constraint(equalToConstant: 15),
             coloredProgressBar.widthAnchor.constraint(equalTo: progressBar.widthAnchor, multiplier: percentage)
         ])
+    }
+}
+
+extension ProgressVC: TodoDetailVCDelegate {
+    
+    func onChangeTask(tasks: [Task]) {
+        DispatchQueue.main.async {
+            self.configureProgressLabel(tasks: tasks)
+            self.configureColoredProgressBar()
+            return
+        }
     }
 }
