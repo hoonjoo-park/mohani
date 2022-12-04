@@ -52,6 +52,7 @@ class TaskInputVC: UIViewController {
         guard delegate != nil else { return }
         
         delegate.onAddTask(title: taskValue)
+        textField.text = ""
         return
     }
 }
