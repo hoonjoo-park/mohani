@@ -25,6 +25,7 @@ class TodoDetailVC: UIViewController {
     let tableTitleLabel = TitleLabel(color: Colors.black)
     let addTaskButton = PlusButton(frame: .zero)
     var collectionView: UICollectionView!
+    let emptyTaskView = TitleLabel(color: Colors.gray)
     var UIViews: [UIView] = []
     
     
@@ -35,6 +36,7 @@ class TodoDetailVC: UIViewController {
         configureTodoInfo(date: currentDate)
         configureTasks(date: currentDate)
         
+        configureEmptyTaskView()
         configureViewController()
         configureProgressView()
         configureCollectionView()
@@ -87,12 +89,23 @@ class TodoDetailVC: UIViewController {
         progressView.layer.shadowRadius = 10
     }
     
+    private func configureEmptyTaskView() {
+        emptyTaskView.text = "등록된 할 일이 없습니다."
+        emptyTaskView.textAlignment = .center
+    }
+    
     
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createTaskCellLayout(view: view))
         collectionView.delegate = self
         collectionView.backgroundColor = Colors.blueWhite
         collectionView.register(TaskCell.self, forCellWithReuseIdentifier: TaskCell.reuseId)
+        
+        if tasks.count == 0 {
+            collectionView.backgroundView = emptyTaskView
+        } else {
+            collectionView.backgroundView = nil
+        }
     }
     
     
@@ -195,9 +208,7 @@ class TodoDetailVC: UIViewController {
 }
 
 
-extension TodoDetailVC: UICollectionViewDelegate {
-    
-}
+extension TodoDetailVC: UICollectionViewDelegate {}
 
 
 
