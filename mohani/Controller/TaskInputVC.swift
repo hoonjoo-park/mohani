@@ -20,9 +20,27 @@ class TaskInputVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Colors.white
+        configureViewController()
         configureAddButtonAction()
         configureUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        textField.becomeFirstResponder()
+    }
+    
+    func configureViewController() {
+        view.backgroundColor = Colors.white
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTappedViewController))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        view?.isUserInteractionEnabled = true
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func onTappedViewController() {
+        view.hideKeyboard()
     }
     
     
