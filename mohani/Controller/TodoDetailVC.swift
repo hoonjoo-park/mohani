@@ -164,8 +164,10 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    func sortTasksByIsDone() {
-        tasks.sort(by: { !$0.isDone && $1.isDone })
+    private func sortTasksByIsDone() {
+        tasks.sort { a, b in
+            return !a.isDone && b.isDone
+        }
     }
     
     
