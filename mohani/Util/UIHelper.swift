@@ -13,6 +13,8 @@ enum Colors {
     static let blue = UIColor(r: 7, g: 117, b: 255)
     static let black = UIColor(r: 2, g: 4, b: 23)
     static let gray = UIColor(r: 165, g: 171, b: 195)
+    static let darkGray = UIColor(r: 82, g: 81, b: 86)
+    static let green = UIColor(r: 95, g: 202, b: 141)
 }
 
 
@@ -29,5 +31,9 @@ enum UIHelper {
         
         return flowLayout
     }
+}
+
+enum ToastStatus {
+    case success, error, warning
 }
  

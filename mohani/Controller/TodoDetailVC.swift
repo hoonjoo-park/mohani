@@ -184,8 +184,8 @@ class TodoDetailVC: UIViewController {
         
         if let bottomSheet = TaskInputVC.sheetPresentationController {
             bottomSheet.detents = [.custom(resolver: { context in
-                return 600
-            }), .large()]
+                return 450
+            })]
             bottomSheet.prefersGrabberVisible = true
         }
         
@@ -208,6 +208,7 @@ extension TodoDetailVC: TaskInputVCDelegate {
         addTask(title: title, createdAt: currentDate)
         configureTasks(date: currentDate)
         delegate.onChangeTask(tasks: tasks)
+        
         return
     }
 }
