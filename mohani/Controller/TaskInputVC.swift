@@ -69,7 +69,7 @@ class TaskInputVC: UIViewController {
         guard let taskValue = textField.text, taskValue.count > 0 else { return }
         guard delegate != nil else { return }
         
-//        delegate.onAddTask(title: taskValue)
+        delegate.onAddTask(title: taskValue)
         textField.text = ""
         
         showToastMessage(message: "할 일이 추가되었습니다!", status: .success)

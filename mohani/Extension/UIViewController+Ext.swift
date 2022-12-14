@@ -83,7 +83,7 @@ extension UIViewController {
         DispatchQueue.main.async {
             self.view.addSubview(toastMessageView)
             
-            UIView.animate(withDuration: 0.4, delay: 0.3, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseOut, animations: {
                 toastMessageView.frame = CGRect(x: padding, y: UIScreen.main.bounds.height / 2 - 52, width: UIScreen.main.bounds.width - 2 * padding, height: 52)
                 return
             })
