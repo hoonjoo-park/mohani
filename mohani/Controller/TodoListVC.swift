@@ -8,7 +8,7 @@
 import UIKit
 
 class TodoListVC: UIViewController {
-    let todoList: [TodoList] = []
+    var todoList: [TodoList] = []
     
     var tableView = UITableView()
 
@@ -24,7 +24,19 @@ class TodoListVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.setNavigationBarHidden(false, animated: true)
+        configureTodoList()
+    }
+    
+    
+    private func configureTodoList() {
+        todoList = fetchAllTodoList()
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.tableView.bringSubviewToFront(self.tableView)
+        }
     }
     
     
@@ -58,6 +70,8 @@ extension TodoListVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCell.reuseID) as! TodoListCell
+        let todoList = todoList[indexPath.row]
+        cell.setCell(todoList: todoList)
         
         return cell
     }

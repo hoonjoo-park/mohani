@@ -10,7 +10,6 @@ import CoreData
 
 extension UIViewController {
     var context: NSManagedObjectContext { return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
-    var fetchTodoListRequest: NSFetchRequest<TodoList> { return TodoList.fetchRequest() }
     
     func fetchTasks(date: String) -> [Task] {
         let fetchTasksRequest = Task.fetchRequest() as NSFetchRequest<Task>
@@ -32,17 +31,19 @@ extension UIViewController {
     
     
     func fetchTodoListInfo(date: String) -> [TodoList] {
+        let fetchTodoListRequest = TodoList.fetchRequest() as NSFetchRequest<TodoList>
         let predicate = NSPredicate(format: "createdAt == %@", date)
         fetchTodoListRequest.predicate = predicate
         
         do {
             let todo = try context.fetch(fetchTodoListRequest)
-
+            print("@@@@@@@@@", todo)
+            
             guard todo.count > 0 else {
                 let newTodoInfo = TodoList(context: context)
                 newTodoInfo.createdAt = date
-
-                try context.save()
+                
+                saveContext()
                 
                 return [newTodoInfo]
             }
@@ -51,6 +52,22 @@ extension UIViewController {
         }
         catch {
             // TODO: 에러 핸들링 로직 추가 필요
+            return []
+        }
+    }
+    
+    
+    func fetchAllTodoList() -> [TodoList] {
+        let fetchTodoListRequest = TodoList.fetchRequest() as NSFetchRequest<TodoList>
+        
+        do {
+            let todoList = try context.fetch(fetchTodoListRequest)
+            
+            guard todoList.count > 0 else { return [] }
+            
+            return todoList
+        }
+        catch {
             return []
         }
     }
