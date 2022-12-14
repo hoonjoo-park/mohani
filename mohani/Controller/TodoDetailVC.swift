@@ -45,6 +45,12 @@ class TodoDetailVC: UIViewController {
         configureUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     
     private func configureTodoInfo(date: String) {
         let todo = fetchTodoListInfo(date: currentDate)
@@ -184,6 +190,8 @@ class TodoDetailVC: UIViewController {
     
     @objc func onTappedListButton() {
         // TODO: TodoListVC로 네비게이션 이동되는 로직 구현 필요
+        let destination = TodoListVC()
+        navigationController?.pushViewController(destination, animated: true)
         return
     }
     
