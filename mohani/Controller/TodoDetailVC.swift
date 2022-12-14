@@ -115,15 +115,6 @@ class TodoDetailVC: UIViewController {
             cell.setCell(task: self.tasks[indexPath.row])
             cell.delegate = self
             
-//            var config = UICollectionLayoutListConfiguration(appearance: .plain)
-//            config.trailingSwipeActionsConfigurationProvider = { indexPath in
-//                let delete = UIContextualAction(style: .destructive, title: .none) { [weak self] action, view, completion in
-//                    self?.delete(indexPath)
-//                    completion(true)
-//                }
-//                return UISwipeActionsConfiguration(actions: [delete])
-//            }
-            
             return cell
         })
     }
