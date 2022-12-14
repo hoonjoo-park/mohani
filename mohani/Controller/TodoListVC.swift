@@ -9,16 +9,56 @@ import UIKit
 
 class TodoListVC: UIViewController {
     let todoList: [TodoList] = []
+    
+    var tableView = UITableView()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureViewController()
+        configureTableView()
+        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    
+    private func configureViewController() {
         view.backgroundColor = Colors.gray
         self.title = "List"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+    
+    private func configureTableView() {
+        view.addSubview(tableView)
+        
+        tableView.frame = view.bounds
+        tableView.rowHeight = 60
+        tableView.backgroundColor = Colors.gray
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.removeExcessCells()
+        
+        tableView.register(TodoListCell.self, forCellReuseIdentifier: TodoListCell.reuseID)
+    }
+}
+
+
+extension TodoListVC: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return todoList.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCell.reuseID) as! TodoListCell
+        
+        return cell
     }
 }
