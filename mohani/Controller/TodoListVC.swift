@@ -75,4 +75,12 @@ extension TodoListVC: UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedDate = todoList[indexPath.row].createdAt!
+        
+        let todoDetailVC = TodoDetailVC(date: selectedDate)
+        navigationController?.pushViewController(todoDetailVC, animated: true)
+    }
 }

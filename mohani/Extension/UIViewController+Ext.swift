@@ -37,7 +37,6 @@ extension UIViewController {
         
         do {
             let todo = try context.fetch(fetchTodoListRequest)
-            print("@@@@@@@@@", todo)
             
             guard todo.count > 0 else {
                 let newTodoInfo = TodoList(context: context)

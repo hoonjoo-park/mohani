@@ -28,6 +28,15 @@ class TodoDetailVC: UIViewController {
     let emptyTaskView = TitleLabel(color: Colors.gray)
     var UIViews: [UIView] = []
     
+    init(date: String = Date().toYearMonthDate()) {
+        super.init(nibName: nil, bundle: nil)
+        self.currentDate = date
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     override func viewDidLoad() {
@@ -44,6 +53,7 @@ class TodoDetailVC: UIViewController {
         configureAddTaskButton()
         configureUI()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
