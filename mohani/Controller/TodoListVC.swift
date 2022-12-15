@@ -18,7 +18,6 @@ class TodoListVC: UIViewController {
         
         configureViewController()
         configureTableView()
-        
     }
     
     
@@ -41,9 +40,20 @@ class TodoListVC: UIViewController {
     
     
     private func configureViewController() {
-        view.backgroundColor = Colors.gray
+        view.backgroundColor = Colors.navy
         self.title = "List"
+        
+        navigationItem.hidesBackButton = true
+        navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .add, target: self, action: #selector(addNewTodoListForToday))
+        navigationItem.rightBarButtonItem?.tintColor = Colors.white
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: Colors.white]
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    
+     @objc func addNewTodoListForToday() {
+         let todoDetailVC = TodoDetailVC()
+         navigationController?.pushViewController(todoDetailVC, animated: true)
     }
     
     
@@ -52,7 +62,8 @@ class TodoListVC: UIViewController {
         
         tableView.frame = view.bounds
         tableView.rowHeight = 60
-        tableView.backgroundColor = Colors.gray
+        tableView.backgroundColor = Colors.navy
+        tableView.separatorColor = Colors.white
         tableView.dataSource = self
         tableView.delegate = self
         tableView.removeExcessCells()
@@ -82,5 +93,29 @@ extension TodoListVC: UITableViewDataSource, UITableViewDelegate {
         
         let todoDetailVC = TodoDetailVC(date: selectedDate)
         navigationController?.pushViewController(todoDetailVC, animated: true)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "삭제"
+    }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        
+        let todoListToDelete = todoList[indexPath.row]
+        
+        let alert = UIAlertController(title: "삭제", message: "정말 삭제하시겠습니까?\n관련된 모든 데이터가 삭제됩니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .default) { _ in return })
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { action in
+            // MARK: DB에서 삭제
+            self.removeTodoList(todoList: todoListToDelete)
+            // MARK: TableView 및 todoList 배열에서 삭제
+            self.todoList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
+        })
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }

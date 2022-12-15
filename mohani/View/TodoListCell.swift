@@ -37,7 +37,7 @@ class TodoListCell: UITableViewCell {
     private func configureUI() {
         addSubview(listLabel)
         accessoryType = .disclosureIndicator
-        backgroundColor = Colors.gray
+        backgroundColor = Colors.navy
     }
     
     

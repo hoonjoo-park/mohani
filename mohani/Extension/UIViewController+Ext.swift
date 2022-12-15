@@ -82,6 +82,17 @@ extension UIViewController {
     }
     
     
+    func removeTodoList(todoList: TodoList) {
+        let createdAt = todoList.createdAt!
+        let tasksToDelete = self.fetchTasks(date: createdAt)
+        
+        context.delete(todoList)
+        for task in tasksToDelete { context.delete(task) }
+        
+        saveContext()
+    }
+    
+    
     func saveContext() {
         do {
             try context.save()
