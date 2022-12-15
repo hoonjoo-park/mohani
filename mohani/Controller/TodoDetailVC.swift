@@ -199,10 +199,8 @@ class TodoDetailVC: UIViewController {
     
     
     @objc func onTappedListButton() {
-        // TODO: TodoListVC로 네비게이션 이동되는 로직 구현 필요
-        let destination = TodoListVC()
-        navigationController?.pushViewController(destination, animated: true)
-        return
+        let todoListVC = TodoListVC()
+        navigationController?.pushViewControllerFromLeftToRight(viewController: todoListVC)
     }
     
     
