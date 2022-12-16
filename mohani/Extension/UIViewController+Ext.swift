@@ -24,7 +24,6 @@ extension UIViewController {
             return tasks
         }
         catch {
-            // TODO: 에러 핸들링 로직 추가 필요
             return []
         }
     }
@@ -50,7 +49,6 @@ extension UIViewController {
             return todo
         }
         catch {
-            // TODO: 에러 핸들링 로직 추가 필요
             return []
         }
     }
@@ -98,7 +96,7 @@ extension UIViewController {
             try context.save()
         }
         catch {
-            // TODO: 에러 핸들링 로직 필요
+            presentErrorAlert(message: "데이터 갱신 중 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.")
         }
     }
     
@@ -132,5 +130,15 @@ extension UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
             toastMessageView.removeFromSuperview()
         }
+    }
+    
+    func presentErrorAlert(message: String) {
+        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { action in
+            self.viewWillAppear(true)
+        })
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
