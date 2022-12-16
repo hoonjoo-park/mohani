@@ -72,7 +72,7 @@ class TaskInputVC: UIViewController {
         delegate.onAddTask(title: taskValue)
         textField.text = ""
         
-        showToastMessage(message: "할 일이 추가되었습니다!", status: .success)
+        showToastMessage(message: "할 일이 추가되었습니다!", status: .success, withKeyboard: true)
         
         return
     }

@@ -102,17 +102,30 @@ extension UIViewController {
         }
     }
     
-    func showToastMessage(message: String, status: ToastStatus) {
+    func showToastMessage(message: String, status: ToastStatus, withKeyboard: Bool) {
+        var startY: CGFloat
+        var targetY: CGFloat
+        
         let padding: CGFloat = 20
-        let frame = CGRect(x: padding, y: UIScreen.main.bounds.height / 2 + 26, width: UIScreen.main.bounds.width - 2 * padding, height: 52)
+        let toastHeight: CGFloat = 52
+        let toastWidth: CGFloat = UIScreen.main.bounds.width - 2 * padding
+        
+        if withKeyboard {
+            startY = (UIScreen.main.bounds.height / 2) + (toastHeight / 2)
+            targetY = UIScreen.main.bounds.height / 2 - toastHeight
+        } else {
+            startY = UIScreen.main.bounds.height + toastHeight
+            targetY = UIScreen.main.bounds.height - (toastHeight * 2)
+        }
+        
+        let frame = CGRect(x: padding, y: startY, width: toastWidth, height: toastHeight)
         let toastMessageView = ToastMessageView(frame: frame, message: message, status: status)
         
         DispatchQueue.main.async {
             self.view.addSubview(toastMessageView)
             
             UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseOut, animations: {
-                toastMessageView.frame = CGRect(x: padding, y: UIScreen.main.bounds.height / 2 - 52, width: UIScreen.main.bounds.width - 2 * padding, height: 52)
-                return
+                toastMessageView.frame = CGRect(x: padding, y: targetY, width: toastWidth, height: toastHeight)
             })
         }
         

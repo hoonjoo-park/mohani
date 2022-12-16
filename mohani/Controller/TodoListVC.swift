@@ -114,6 +114,8 @@ extension TodoListVC: UITableViewDataSource, UITableViewDelegate {
             // MARK: TableView 및 todoList 배열에서 삭제
             self.todoList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .left)
+            
+            self.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
         })
         
         self.present(alert, animated: true, completion: nil)
