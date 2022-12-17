@@ -38,4 +38,3 @@ enum UIHelper {
 enum ToastStatus {
     case success, error, warning
 }
- 

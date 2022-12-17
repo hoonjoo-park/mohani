@@ -28,6 +28,8 @@ class TodoDetailVC: UIViewController {
     let emptyTaskView = TitleLabel(color: Colors.gray)
     var UIViews: [UIView] = []
     
+    private var animator: UIViewPropertyAnimator?
+    
     init(date: String = Date().toYearMonthDate()) {
         super.init(nibName: nil, bundle: nil)
         self.currentDate = date
@@ -130,9 +132,23 @@ class TodoDetailVC: UIViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
             cell.setCell(task: self.tasks[indexPath.row])
             cell.delegate = self
+            self.addSwipeLeftGestureRecognizer(to: cell)
             
             return cell
         })
+    }
+    
+    
+    func addSwipeLeftGestureRecognizer(to cell: TaskCell) {
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        
+        cell.addGestureRecognizer(swipeLeft)
+    }
+    
+    
+    @objc func handleSwipeGesture(_ gesture: UISwipeGestureRecognizer) {
+        print("hello")
     }
     
     
