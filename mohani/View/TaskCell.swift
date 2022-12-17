@@ -20,12 +20,16 @@ class TaskCell: UICollectionViewCell {
     
     var task: Task!
     
+    private var animator: UIViewPropertyAnimator?
+    private let gesture = RightToLeftSwipeGestureRecognizer()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         configureCellUI()
         configureUI()
+        addGestureHandler()
     }
     
     
@@ -108,5 +112,26 @@ class TaskCell: UICollectionViewCell {
             bodyLabel.leadingAnchor.constraint(equalTo: checkBoxButton.trailingAnchor, constant: 10),
             bodyLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
         ])
+    }
+    
+    private func addGestureHandler() {
+        self.addGestureRecognizer(self.gesture)
+        self.gesture.addTarget(self, action: #selector(self.handleSwipeGesture(_:)))
+    }
+    
+    @objc private func handleSwipeGesture(_ gesture: UIPanGestureRecognizer) {
+        let translationX = gesture.translation(in: self).x
+        let threshold:CGFloat = -50
+        
+        switch gesture.state {
+        case .changed:
+            self.transform = CGAffineTransform(translationX: translationX, y: 0)
+        case .cancelled, .ended:
+            guard translationX > threshold else { return }
+            
+            self.transform = .identity
+        default:
+            break
+        }
     }
 }
