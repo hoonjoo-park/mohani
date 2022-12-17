@@ -129,7 +129,9 @@ class TaskCell: UICollectionViewCell {
         case .cancelled, .ended:
             guard translationX > threshold else { return }
             
-            self.transform = .identity
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+                self.transform = .identity
+            }
         default:
             break
         }
