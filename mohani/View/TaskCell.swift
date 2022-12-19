@@ -15,7 +15,9 @@ class TaskCell: UICollectionViewCell {
     static let reuseId = "TaskCell"
     
     var checkBoxButton = UIImageView()
+    
     var delegate: TaskCellDelegate!
+    var prevTranslateX: Double = 0
     let bodyLabel = BodyLabel(color: Colors.black)
     
     var task: Task!
@@ -125,12 +127,16 @@ class TaskCell: UICollectionViewCell {
         
         switch gesture.state {
         case .changed:
-            self.transform = CGAffineTransform(translationX: translationX, y: 0)
+            self.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
         case .cancelled, .ended:
-            guard translationX > threshold else { return }
+            guard translationX > threshold else {
+                self.prevTranslateX += translationX
+                return
+            }
             
             UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
                 self.transform = .identity
+                self.prevTranslateX = 0
             }
         default:
             break
