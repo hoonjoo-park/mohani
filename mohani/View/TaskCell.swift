@@ -15,6 +15,8 @@ class TaskCell: UICollectionViewCell {
     static let reuseId = "TaskCell"
     
     var checkBoxButton = UIImageView()
+    var cellView = UIView()
+    var taskDeleteButton = UIImageView()
     
     var delegate: TaskCellDelegate!
     var prevTranslateX: Double = 0
@@ -30,6 +32,7 @@ class TaskCell: UICollectionViewCell {
         super.init(frame: frame)
         
         configureCellUI()
+        configureDeleteButton()
         configureUI()
         addGestureHandler()
     }
@@ -87,17 +90,28 @@ class TaskCell: UICollectionViewCell {
     }
     
     
+    private func configureDeleteButton() {
+        taskDeleteButton.translatesAutoresizingMaskIntoConstraints = false
+        taskDeleteButton.image = UIImage(systemName: "trash.fill")
+        taskDeleteButton.tintColor = .systemRed
+    }
+    
+    
     private func configureCellUI() {
         let shadowColor = Colors.black.cgColor
-        self.backgroundColor = Colors.white
-        self.layer.cornerRadius = 10
-        self.layer.shadowColor = shadowColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
-        self.layer.shadowRadius = 3
-        self.layer.shadowOpacity = 0.12
+        cellView.backgroundColor = Colors.white
+        cellView.layer.cornerRadius = 10
+        cellView.layer.shadowColor = shadowColor
+        cellView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cellView.layer.shadowRadius = 3
+        cellView.layer.shadowOpacity = 0.12
         
         checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubviews(checkBoxButton, bodyLabel)
+        cellView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubviews(cellView, taskDeleteButton)
+        cellView.addSubviews(checkBoxButton, bodyLabel)
+//        addSubviews(checkBoxButton, bodyLabel)
     }
     
     
@@ -105,14 +119,23 @@ class TaskCell: UICollectionViewCell {
         let padding: CGFloat = 15
         
         NSLayoutConstraint.activate([
-            checkBoxButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            checkBoxButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
+            cellView.topAnchor.constraint(equalTo: topAnchor),
+            cellView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            cellView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            cellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            checkBoxButton.centerYAnchor.constraint(equalTo: cellView.centerYAnchor),
+            checkBoxButton.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: padding),
             checkBoxButton.widthAnchor.constraint(equalToConstant: 20),
             checkBoxButton.heightAnchor.constraint(equalToConstant: 20),
             
-            bodyLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            bodyLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor),
             bodyLabel.leadingAnchor.constraint(equalTo: checkBoxButton.trailingAnchor, constant: 10),
-            bodyLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
+            bodyLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -padding),
+            
+            taskDeleteButton.heightAnchor.constraint(equalToConstant: 20),
+            taskDeleteButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            taskDeleteButton.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
     
@@ -127,7 +150,7 @@ class TaskCell: UICollectionViewCell {
         
         switch gesture.state {
         case .changed:
-            self.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
+            cellView.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
         case .cancelled, .ended:
             guard translationX > threshold else {
                 self.prevTranslateX += translationX
@@ -135,7 +158,7 @@ class TaskCell: UICollectionViewCell {
             }
             
             UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-                self.transform = .identity
+                self.cellView.transform = .identity
                 self.prevTranslateX = 0
             }
         default:

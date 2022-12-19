@@ -25,7 +25,6 @@
 		CB6CC85D29377A9800134993 /* TaskInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC85C29377A9800134993 /* TaskInputVC.swift */; };
 		CB6CC85F293782E200134993 /* TaskTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC85E293782E200134993 /* TaskTextField.swift */; };
 		CB6CC8612937855000134993 /* AddTaskButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC8602937855000134993 /* AddTaskButton.swift */; };
-		CB8ADEB92950995E00FFC979 /* TaskDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8ADEB82950995E00FFC979 /* TaskDeleteButton.swift */; };
 		CB8BA7D12939E93B0088D16B /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8BA7D02939E93B0088D16B /* UITableView+Ext.swift */; };
 		CB8D2B492938A9BA005D6B43 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8D2B482938A9BA005D6B43 /* UIViewController+Ext.swift */; };
 		CBA8B740294A188500EE2CA1 /* TodoListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA8B73F294A188500EE2CA1 /* TodoListCell.swift */; };
@@ -56,7 +55,6 @@
 		CB6CC85C29377A9800134993 /* TaskInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskInputVC.swift; sourceTree = "<group>"; };
 		CB6CC85E293782E200134993 /* TaskTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTextField.swift; sourceTree = "<group>"; };
 		CB6CC8602937855000134993 /* AddTaskButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskButton.swift; sourceTree = "<group>"; };
-		CB8ADEB82950995E00FFC979 /* TaskDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDeleteButton.swift; sourceTree = "<group>"; };
 		CB8BA7D02939E93B0088D16B /* UITableView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
 		CB8D2B482938A9BA005D6B43 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		CBA8B73F294A188500EE2CA1 /* TodoListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListCell.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				CB6CC85E293782E200134993 /* TaskTextField.swift */,
 				CB6CC8602937855000134993 /* AddTaskButton.swift */,
 				CB0BF500293CAD2F00F86728 /* TaskProgressView.swift */,
-				CB8ADEB82950995E00FFC979 /* TaskDeleteButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -262,7 +259,6 @@
 				CBA8B740294A188500EE2CA1 /* TodoListCell.swift in Sources */,
 				CB0264C1293644C200650F51 /* Date+Ext.swift in Sources */,
 				CB6CC85B2937769700134993 /* PlusButton.swift in Sources */,
-				CB8ADEB92950995E00FFC979 /* TaskDeleteButton.swift in Sources */,
 				CBC281E1292A82C600B2C144 /* SceneDelegate.swift in Sources */,
 				CB0BF501293CAD2F00F86728 /* TaskProgressView.swift in Sources */,
 				CB6CC8612937855000134993 /* AddTaskButton.swift in Sources */,
