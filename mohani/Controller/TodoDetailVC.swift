@@ -128,7 +128,7 @@ class TodoDetailVC: UIViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, Task>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
-            cell.setCell(task: self.tasks[indexPath.row])
+            cell.setCell(task: self.tasks[indexPath.row], indexPath: indexPath)
             cell.delegate = self
             
             return cell
@@ -181,8 +181,6 @@ class TodoDetailVC: UIViewController {
     
     
     private func updateTasks() {
-        guard self.tasks.count > 0 else { return }
-        
         sortTasksByIsDone()
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
@@ -247,5 +245,25 @@ extension TodoDetailVC: TaskCellDelegate {
         delegate.onChangeTask(tasks: tasks)
         sortTasksByIsDone()
         updateTasks()
+    }
+    
+    func onTapDeleteTask(indexPath: IndexPath) {
+        guard delegate != nil else { return }
+        let taskToDelete = tasks[indexPath.row]
+        
+        let alert = UIAlertController(title: "삭제", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .default) { _ in return })
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { action in
+            // MARK: DB에서 삭제
+            self.removeTask(task: taskToDelete)
+            // MARK: TableView 및 todoList 배열에서 삭제
+            self.tasks.remove(at: indexPath.row)
+            self.updateTasks()
+            
+
+            self.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
+        })
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }

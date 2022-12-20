@@ -9,6 +9,7 @@ import UIKit
 
 protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
+    func onTapDeleteTask(indexPath: IndexPath)
 }
 
 class TaskCell: UICollectionViewCell {
@@ -23,6 +24,7 @@ class TaskCell: UICollectionViewCell {
     let bodyLabel = BodyLabel(color: Colors.black)
     
     var task: Task!
+    var indexPath: IndexPath!
     
     private var animator: UIViewPropertyAnimator?
     private let gesture = RightToLeftSwipeGestureRecognizer()
@@ -43,8 +45,9 @@ class TaskCell: UICollectionViewCell {
     }
     
     
-    func setCell(task: Task) {
+    func setCell(task: Task, indexPath: IndexPath) {
         self.task = task
+        self.indexPath = indexPath
         
         setCellData()
         
@@ -94,6 +97,16 @@ class TaskCell: UICollectionViewCell {
         taskDeleteButton.translatesAutoresizingMaskIntoConstraints = false
         taskDeleteButton.image = UIImage(systemName: "trash.fill")
         taskDeleteButton.tintColor = .systemRed
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(deleteTask))
+        taskDeleteButton.addGestureRecognizer(gestureRecognizer)
+        taskDeleteButton.isUserInteractionEnabled = true
+    }
+    
+    
+    @objc private func deleteTask() {
+        delegate.onTapDeleteTask(indexPath: indexPath)
+        transformToIdentity()
     }
     
     
@@ -111,7 +124,6 @@ class TaskCell: UICollectionViewCell {
         
         addSubviews(cellView, taskDeleteButton)
         cellView.addSubviews(checkBoxButton, bodyLabel)
-//        addSubviews(checkBoxButton, bodyLabel)
     }
     
     
@@ -135,7 +147,7 @@ class TaskCell: UICollectionViewCell {
             
             taskDeleteButton.heightAnchor.constraint(equalToConstant: 20),
             taskDeleteButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            taskDeleteButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            taskDeleteButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
         ])
     }
     
@@ -149,20 +161,35 @@ class TaskCell: UICollectionViewCell {
         let threshold:CGFloat = -50
         
         switch gesture.state {
+        
         case .changed:
             cellView.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
+        
         case .cancelled, .ended:
             guard translationX > threshold else {
-                self.prevTranslateX += translationX
+                self.prevTranslateX = -50
+                transformToDeletePosition()
                 return
             }
             
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-                self.cellView.transform = .identity
-                self.prevTranslateX = 0
-            }
+            transformToIdentity()
         default:
             break
+        }
+    }
+    
+    
+    private func transformToIdentity() {
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+            self.cellView.transform = .identity
+            self.prevTranslateX = 0
+        }
+    }
+    
+    
+    private func transformToDeletePosition() {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
+            self.cellView.transform = CGAffineTransform(translationX: -50, y: 0)
         }
     }
 }

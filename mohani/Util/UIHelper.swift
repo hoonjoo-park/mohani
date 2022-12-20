@@ -42,15 +42,14 @@ enum ToastStatus {
 
 final class RightToLeftSwipeGestureRecognizer: UIPanGestureRecognizer {
     
-  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-    super.touchesMoved(touches, with: event)
-    guard let view = self.view, self.state == .began else { return }
-
-    guard velocity(in: view).x.magnitude > velocity(in: view).y.magnitude else { return }
-
-    guard velocity(in: view).x < 0 else {
-      self.state = .failed
-      return
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+        
+        guard let view = self.view, self.state == .began else { return }
+        
+        guard velocity(in: view).x.magnitude > velocity(in: view).y.magnitude else {
+            self.state = .failed
+            return
+        }
     }
-  }
 }

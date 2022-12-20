@@ -100,6 +100,13 @@ extension UIViewController {
         }
     }
     
+    
+    func removeTask(task: Task) {
+        context.delete(task)
+        saveContext()
+    }
+    
+    
     func showToastMessage(message: String, status: ToastStatus, withKeyboard: Bool) {
         var startY: CGFloat
         var targetY: CGFloat
@@ -131,6 +138,7 @@ extension UIViewController {
             toastMessageView.removeFromSuperview()
         }
     }
+    
     
     func presentErrorAlert(message: String) {
         let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
