@@ -94,6 +94,7 @@ class TaskCell: UICollectionViewCell {
     
     
     private func configureDeleteButton() {
+        taskDeleteButton.alpha = 0
         taskDeleteButton.translatesAutoresizingMaskIntoConstraints = false
         taskDeleteButton.image = UIImage(systemName: "trash.fill")
         taskDeleteButton.tintColor = .systemRed
@@ -164,14 +165,24 @@ class TaskCell: UICollectionViewCell {
         
         case .changed:
             cellView.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
+            
+            if translationX > 0 {
+                taskDeleteButton.alpha = (30 - translationX) / 50
+            } else {
+                taskDeleteButton.alpha = -translationX / 50
+            }
+
+//            taskDeleteButton.alpha += -translationX / 100
         
         case .cancelled, .ended:
             guard translationX > threshold else {
                 self.prevTranslateX = -50
+                taskDeleteButton.alpha = 1
                 transformToDeletePosition()
                 return
             }
             
+            taskDeleteButton.alpha = 0
             transformToIdentity()
         default:
             break
@@ -191,5 +202,6 @@ class TaskCell: UICollectionViewCell {
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
             self.cellView.transform = CGAffineTransform(translationX: -50, y: 0)
         }
+        taskDeleteButton.alpha = 1
     }
 }
