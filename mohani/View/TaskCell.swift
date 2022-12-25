@@ -9,7 +9,7 @@ import UIKit
 
 protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
-    func onTapDeleteTask(indexPath: IndexPath)
+    func onTapDeleteTask(task: Task)
     func onSwipeCell()
     
     var lastSwipedCell: UICollectionViewCell { get set }
@@ -28,7 +28,6 @@ class TaskCell: UICollectionViewCell {
     var prevTranslateX: Double = 0
     var lastSwipedCell: UICollectionViewCell!
     
-    private var indexPath: IndexPath!
     private var animator: UIViewPropertyAnimator?
     private let gesture = RightToLeftSwipeGestureRecognizer()
     
@@ -108,9 +107,8 @@ class TaskCell: UICollectionViewCell {
     }
     
     
-    func setCell(task: Task, indexPath: IndexPath) {
+    func setCell(task: Task) {
         self.task = task
-        self.indexPath = indexPath
         
         setCellData()
         
@@ -155,7 +153,7 @@ class TaskCell: UICollectionViewCell {
     
     
     @objc private func deleteTask() {
-        delegate.onTapDeleteTask(indexPath: indexPath)
+        delegate.onTapDeleteTask(task: task)
         transformToIdentity()
         taskDeleteButton.alpha = 0
     }
@@ -168,7 +166,7 @@ class TaskCell: UICollectionViewCell {
         switch gesture.state {
             
         case .began:
-            delegate.onSwipeCell(indexPath: indexPath)
+            delegate.onSwipeCell()
         
         case .changed:
             DispatchQueue.main.async {
