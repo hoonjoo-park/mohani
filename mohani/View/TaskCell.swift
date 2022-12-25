@@ -10,7 +10,7 @@ import UIKit
 protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
     func onTapDeleteTask(indexPath: IndexPath)
-    func onSwipeCell(indexPath: IndexPath)
+    func onSwipeCell()
     
     var lastSwipedCell: UICollectionViewCell { get set }
 }

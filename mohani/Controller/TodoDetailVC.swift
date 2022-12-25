@@ -189,6 +189,7 @@ class TodoDetailVC: UIViewController {
         
         snapshot.appendSections([.main])
         snapshot.appendItems(self.tasks)
+
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
     }
     
@@ -222,7 +223,6 @@ class TodoDetailVC: UIViewController {
 
 
 extension TodoDetailVC: UICollectionViewDelegate {}
-
 
 
 extension TodoDetailVC: TaskInputVCDelegate {
@@ -277,7 +277,7 @@ extension TodoDetailVC: TaskCellDelegate {
     }
     
     
-    func onSwipeCell(indexPath: IndexPath) {
+    func onSwipeCell() {
         guard let cell = cellToTransformIdentity else { return }
         
         let cellContainer = cell.subviews[0]
