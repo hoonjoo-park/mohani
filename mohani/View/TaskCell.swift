@@ -164,12 +164,14 @@ class TaskCell: UICollectionViewCell {
         switch gesture.state {
         
         case .changed:
-            cellView.transform = CGAffineTransform(translationX: translationX + prevTranslateX, y: 0)
-            
-            if translationX > 0 {
-                taskDeleteButton.alpha = (30 - translationX) / 50
-            } else {
-                taskDeleteButton.alpha = -(translationX + prevTranslateX) / 50
+            DispatchQueue.main.async {
+                self.cellView.transform = CGAffineTransform(translationX: translationX + self.prevTranslateX, y: 0)
+                
+                if translationX > 0 {
+                    self.taskDeleteButton.alpha = self.prevTranslateX == 0 ? 0 : (30 - translationX) / 50
+                } else {
+                    self.taskDeleteButton.alpha = -(translationX + self.prevTranslateX) / 50
+                }
             }
         
         case .cancelled, .ended:
