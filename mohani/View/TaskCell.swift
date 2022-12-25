@@ -157,6 +157,7 @@ class TaskCell: UICollectionViewCell {
     @objc private func deleteTask() {
         delegate.onTapDeleteTask(indexPath: indexPath)
         transformToIdentity()
+        taskDeleteButton.alpha = 0
     }
     
     
