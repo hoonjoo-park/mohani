@@ -20,6 +20,7 @@ class TodoDetailVC: UIViewController {
     var currentDate = Date().toYearMonthDate()
     var isTodoNew = true
     var dataSource: UICollectionViewDiffableDataSource<Section, Task>!
+    var cellToTransformIdentity: UICollectionViewCell!
     
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
@@ -236,6 +237,16 @@ extension TodoDetailVC: TaskInputVCDelegate {
 
 
 extension TodoDetailVC: TaskCellDelegate {
+    
+    var lastSwipedCell: UICollectionViewCell {
+        get {
+            return cellToTransformIdentity
+        }
+        set {
+            cellToTransformIdentity = newValue
+        }
+    }
+    
     func onToggleIsDone(task: Task) {
         guard delegate != nil else { return }
         
@@ -267,22 +278,17 @@ extension TodoDetailVC: TaskCellDelegate {
     
     
     func onSwipeCell(indexPath: IndexPath) {
-        let visibleCells = collectionView.visibleCells
-        let currentCell = visibleCells[indexPath.row]
+        guard let cell = cellToTransformIdentity else { return }
         
-        for cell in visibleCells {
-            if cell == currentCell { continue }
-            
-            let cellContainer = cell.subviews[0]
-            let deleteButton = cell.subviews[1]
-
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-                    cellContainer.transform = .identity
-                }
-                
-                deleteButton.alpha = 0
+        let cellContainer = cell.subviews[0]
+        let deleteButton = cell.subviews[1]
+        
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+                cellContainer.transform = .identity
             }
+
+            deleteButton.alpha = 0
         }
     }
 }

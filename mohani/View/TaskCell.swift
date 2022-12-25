@@ -11,6 +11,8 @@ protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
     func onTapDeleteTask(indexPath: IndexPath)
     func onSwipeCell(indexPath: IndexPath)
+    
+    var lastSwipedCell: UICollectionViewCell { get set }
 }
 
 class TaskCell: UICollectionViewCell {
@@ -22,11 +24,11 @@ class TaskCell: UICollectionViewCell {
     let bodyLabel = BodyLabel(color: Colors.black)
     
     var delegate: TaskCellDelegate!
-    var prevTranslateX: Double = 0
-    
     var task: Task!
-    private var indexPath: IndexPath!
+    var prevTranslateX: Double = 0
+    var lastSwipedCell: UICollectionViewCell!
     
+    private var indexPath: IndexPath!
     private var animator: UIViewPropertyAnimator?
     private let gesture = RightToLeftSwipeGestureRecognizer()
     
@@ -181,6 +183,7 @@ class TaskCell: UICollectionViewCell {
         case .cancelled, .ended:
             guard translationX > threshold else {
                 self.prevTranslateX = -50
+                self.delegate.lastSwipedCell = self
                 taskDeleteButton.alpha = 1
                 transformToDeletePosition()
                 return
