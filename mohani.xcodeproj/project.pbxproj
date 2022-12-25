@@ -112,8 +112,8 @@
 				CB6CC8542937597800134993 /* TitleLabel.swift */,
 				CB6CC8562937598800134993 /* BodyLabel.swift */,
 				CB6CC85A2937769700134993 /* PlusButton.swift */,
-				CB6CC85E293782E200134993 /* TaskTextField.swift */,
 				CB6CC8602937855000134993 /* AddTaskButton.swift */,
+				CB6CC85E293782E200134993 /* TaskTextField.swift */,
 				CB0BF500293CAD2F00F86728 /* TaskProgressView.swift */,
 			);
 			path = View;

@@ -148,6 +148,7 @@ class TodoDetailVC: UIViewController {
         tableTitleLabel.text = "Todo"
         
         UIViews = [progressView, tableTitleLabel, collectionView, addTaskButton]
+        
         for view in UIViews {
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -215,7 +216,6 @@ class TodoDetailVC: UIViewController {
         }
         
         present(TaskInputVC, animated: true)
-        return
     }
 }
 
@@ -231,8 +231,6 @@ extension TodoDetailVC: TaskInputVCDelegate {
         addTask(title: title, createdAt: currentDate)
         configureTasks(date: currentDate)
         delegate.onChangeTask(tasks: tasks)
-        
-        return
     }
 }
 
@@ -259,7 +257,6 @@ extension TodoDetailVC: TaskCellDelegate {
             // MARK: TableView 및 todoList 배열에서 삭제
             self.tasks.remove(at: indexPath.row)
             self.updateTasks()
-            
 
             self.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
         })

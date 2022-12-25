@@ -18,13 +18,13 @@ class TaskCell: UICollectionViewCell {
     var checkBoxButton = UIImageView()
     var cellView = UIView()
     var taskDeleteButton = UIImageView()
+    let bodyLabel = BodyLabel(color: Colors.black)
     
     var delegate: TaskCellDelegate!
     var prevTranslateX: Double = 0
-    let bodyLabel = BodyLabel(color: Colors.black)
     
     var task: Task!
-    var indexPath: IndexPath!
+    private var indexPath: IndexPath!
     
     private var animator: UIViewPropertyAnimator?
     private let gesture = RightToLeftSwipeGestureRecognizer()
@@ -53,12 +53,7 @@ class TaskCell: UICollectionViewCell {
         cellView.layer.shadowOffset = CGSize(width: 0, height: 2)
         cellView.layer.shadowRadius = 3
         cellView.layer.shadowOpacity = 0.12
-        
-        checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
         cellView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubviews(cellView, taskDeleteButton)
-        cellView.addSubviews(checkBoxButton, bodyLabel)
     }
     
     
@@ -76,6 +71,11 @@ class TaskCell: UICollectionViewCell {
     
     private func configureUI() {
         let padding: CGFloat = 15
+        
+        checkBoxButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubviews(cellView, taskDeleteButton)
+        cellView.addSubviews(checkBoxButton, bodyLabel)
         
         NSLayoutConstraint.activate([
             cellView.topAnchor.constraint(equalTo: topAnchor),
@@ -114,8 +114,6 @@ class TaskCell: UICollectionViewCell {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(toggleCheckBox))
         checkBoxButton.addGestureRecognizer(gestureRecognizer)
         checkBoxButton.isUserInteractionEnabled = true
-        
-        return
     }
     
     
@@ -191,16 +189,20 @@ class TaskCell: UICollectionViewCell {
     
     
     private func transformToIdentity() {
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-            self.cellView.transform = .identity
-            self.prevTranslateX = 0
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+                self.cellView.transform = .identity
+                self.prevTranslateX = 0
+            }
         }
     }
     
     
     private func transformToDeletePosition() {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
-            self.cellView.transform = CGAffineTransform(translationX: -50, y: 0)
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
+                self.cellView.transform = CGAffineTransform(translationX: -50, y: 0)
+            }
         }
     }
 }
