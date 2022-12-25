@@ -10,6 +10,7 @@ import UIKit
 protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
     func onTapDeleteTask(indexPath: IndexPath)
+    func onSwipeCell(indexPath: IndexPath)
 }
 
 class TaskCell: UICollectionViewCell {
@@ -159,9 +160,12 @@ class TaskCell: UICollectionViewCell {
     
     @objc private func handleSwipeGesture(_ gesture: UIPanGestureRecognizer) {
         let translationX = gesture.translation(in: self).x
-        let threshold:CGFloat = -50
+        let threshold:CGFloat = -40
         
         switch gesture.state {
+            
+        case .began:
+            delegate.onSwipeCell(indexPath: indexPath)
         
         case .changed:
             DispatchQueue.main.async {

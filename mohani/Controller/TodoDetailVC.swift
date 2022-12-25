@@ -245,6 +245,7 @@ extension TodoDetailVC: TaskCellDelegate {
         updateTasks()
     }
     
+    
     func onTapDeleteTask(indexPath: IndexPath) {
         guard delegate != nil else { return }
         let taskToDelete = tasks[indexPath.row]
@@ -262,5 +263,26 @@ extension TodoDetailVC: TaskCellDelegate {
         })
         
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func onSwipeCell(indexPath: IndexPath) {
+        let visibleCells = collectionView.visibleCells
+        let currentCell = visibleCells[indexPath.row]
+        
+        for cell in visibleCells {
+            if cell == currentCell { continue }
+            
+            let cellContainer = cell.subviews[0]
+            let deleteButton = cell.subviews[1]
+
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+                    cellContainer.transform = .identity
+                }
+                
+                deleteButton.alpha = 0
+            }
+        }
     }
 }
