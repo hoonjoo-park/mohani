@@ -169,7 +169,7 @@ class TaskCell: UICollectionViewCell {
             if translationX > 0 {
                 taskDeleteButton.alpha = (30 - translationX) / 50
             } else {
-                taskDeleteButton.alpha = -translationX / 50
+                taskDeleteButton.alpha = -(translationX + prevTranslateX) / 50
             }
         
         case .cancelled, .ended:
