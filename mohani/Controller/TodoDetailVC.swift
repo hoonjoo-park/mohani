@@ -20,7 +20,7 @@ class TodoDetailVC: UIViewController {
     var currentDate = Date().toYearMonthDate()
     var isTodoNew = true
     var dataSource: UICollectionViewDiffableDataSource<Section, Task>!
-    var cellToTransformIdentity: UICollectionViewCell!
+    var prevSwipedCell: UICollectionViewCell!
     
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
@@ -239,13 +239,10 @@ extension TodoDetailVC: TaskInputVCDelegate {
 extension TodoDetailVC: TaskCellDelegate {
     
     var lastSwipedCell: UICollectionViewCell {
-        get {
-            return cellToTransformIdentity
-        }
-        set {
-            cellToTransformIdentity = newValue
-        }
+        get { return prevSwipedCell }
+        set { prevSwipedCell = newValue }
     }
+    
     
     func onToggleIsDone(task: Task) {
         guard delegate != nil else { return }
@@ -277,7 +274,7 @@ extension TodoDetailVC: TaskCellDelegate {
     
     
     func onSwipeCell() {
-        guard let cell = cellToTransformIdentity else { return }
+        guard let cell = prevSwipedCell else { return }
         
         let cellContainer = cell.subviews[0]
         let deleteButton = cell.subviews[1]
