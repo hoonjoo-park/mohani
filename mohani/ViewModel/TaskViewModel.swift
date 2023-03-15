@@ -23,6 +23,7 @@ class TaskViewModel {
         fetchTasks(createdAt)
     }
     
+    
     func fetchTasks(_ createdAt: String) {
         repository.fetchTasks(createdAt: createdAt).subscribe(
             onSuccess: { [unowned self] tasks in
@@ -32,7 +33,43 @@ class TaskViewModel {
         ).disposed(by: disposeBag)
     }
     
-//    func createTask(title: String, createdAt: String) {
-//        repository.createTask(title: title, createdAt: createdAt).subscribe(onCompleted: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
-//    }
+    
+    func createTask(title: String, createdAt: String) {
+        repository.createTask(title: title, createdAt: createdAt).subscribe(
+            onCompleted: { [unowned self] in
+                do {
+                    var currentTasks = try tasks.value()
+                    
+                    let newTask = Task()
+                    newTask.title = title
+                    newTask.createdAt = createdAt
+                    newTask.isDone = false
+                    
+                    currentTasks.append(newTask)
+                    self.tasks.onNext(currentTasks)
+                } catch {
+                    fatalError("error: \(error)")
+                }
+            }) { error in
+                fatalError("error: \(error)")
+            }.disposed(by: disposeBag)
+    }
+    
+    
+    func deleteTask(_ task:Task) {
+        repository.deleteTask(task).subscribe(
+            onCompleted: { [unowned self] in
+                do {
+                    let currentTasks = try tasks.value()
+                    let filteredTasks = currentTasks.filter { currentTask in
+                        return currentTask != task
+                    }
+                    tasks.onNext(filteredTasks)
+                } catch {
+                    fatalError("error: \(error)")
+                }
+            }) { error in
+                fatalError("error: \(error)")
+            }.disposed(by: disposeBag)
+    }
 }
