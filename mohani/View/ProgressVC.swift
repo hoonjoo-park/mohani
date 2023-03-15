@@ -6,34 +6,24 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ProgressVC: UIViewController {
-    
-    var tasks: [Task]!
-    var totalTaskCount: Int!
-    var doneTaskCount: Int!
+    private let disposeBag = DisposeBag()
+    var taskVM: TaskViewModel!
+    var currentDate: String!
     
     let titleLabel = TitleLabel(color: Colors.black)
     let progressLabel = TitleLabel(color: Colors.gray)
     let progressBar = TaskProgressView(frame: .zero)
     
     
-    init(title: String, tasks: [Task]) {
+    init(currentDate: String) {
         super.init(nibName: nil, bundle: nil)
         
-        self.tasks = tasks
-        titleLabel.text = title
-        
-        configureProgressLabel(tasks: tasks)
-    }
-    
-    
-    private func configureProgressLabel(tasks: [Task]) {
-        self.tasks = tasks
-        
-        totalTaskCount = tasks.count
-        doneTaskCount = (tasks.filter { $0.isDone == true }).count
-        progressLabel.text = "\(doneTaskCount ?? 0)/\(totalTaskCount ?? 0)"
+        taskVM = TaskViewModel(createdAt: currentDate)
+        titleLabel.text = currentDate
     }
     
     
@@ -47,7 +37,17 @@ class ProgressVC: UIViewController {
 
         configureViewController()
         configureUI()
-        setProgressValue()
+        
+        taskVM.tasks
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] tasks in
+                let totalTaskCount = tasks.count
+                let doneTaskCount = (tasks.filter { $0.isDone == true }).count
+                
+                self.configureProgressLabel(totalTaskCount, doneTaskCount)
+                self.setProgressValue(totalTaskCount, doneTaskCount)
+            }).disposed(by: disposeBag)
+        
     }
     
     
@@ -77,20 +77,14 @@ class ProgressVC: UIViewController {
     }
     
     
-    func setProgressValue() {
+    private func configureProgressLabel(_ totalTaskCount: Int, _ doneTaskCount: Int) {
+        progressLabel.text = "\(doneTaskCount)/\(totalTaskCount)"
+    }
+    
+    
+    func setProgressValue(_ totalTaskCount: Int, _ doneTaskCount: Int) {
         let percentage:Float = doneTaskCount == 0 ? 0 : Float(Double(doneTaskCount) / Double(totalTaskCount))
         
         progressBar.setProgress(percentage, animated: true)
-    }
-}
-
-extension ProgressVC: TodoDetailVCDelegate {
-    
-    func onChangeTask(tasks: [Task]) {
-        DispatchQueue.main.async {
-            self.configureProgressLabel(tasks: tasks)
-            self.setProgressValue()
-            return
-        }
     }
 }

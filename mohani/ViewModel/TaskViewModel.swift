@@ -10,14 +10,13 @@ import RxSwift
 
 
 class TaskViewModel {
-    private let repository: TaskCoreDataRepository
+    private let repository = TaskCoreDataRepository()
     private let disposeBag = DisposeBag()
     private let createdAt: String!
     
     let tasks = BehaviorSubject<[Task]>(value: [])
     
-    init(repository: TaskCoreDataRepository, createdAt: String) {
-        self.repository = repository
+    init(createdAt: String) {
         self.createdAt = createdAt
         
         fetchTasks(createdAt)
@@ -34,8 +33,8 @@ class TaskViewModel {
     }
     
     
-    func createTask(title: String, createdAt: String) {
-        repository.createTask(title: title, createdAt: createdAt).subscribe(
+    func addTask(title: String, createdAt: String) {
+        repository.addTask(title: title, createdAt: createdAt).subscribe(
             onCompleted: { [unowned self] in
                 do {
                     var currentTasks = try tasks.value()

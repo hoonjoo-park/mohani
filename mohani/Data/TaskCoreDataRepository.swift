@@ -10,7 +10,7 @@ import CoreData
 import RxSwift
 
 protocol TaskCoreDataRepositoryProtocol: AnyObject {
-    func createTask(title: String, createdAt: String) -> Completable
+    func addTask(title: String, createdAt: String) -> Completable
     func fetchTasks(createdAt: String) -> Single<[Task]>
     func deleteTask(_ task: Task) -> Completable
 }
@@ -36,7 +36,7 @@ class TaskCoreDataRepository: TaskCoreDataRepositoryProtocol {
     }
     
     
-    func createTask(title: String, createdAt: String) -> Completable {
+    func addTask(title: String, createdAt: String) -> Completable {
         return Completable.create { [unowned self] completable in
             let newTask = Task(context: context)
             newTask.title = title

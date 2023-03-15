@@ -9,15 +9,14 @@ import Foundation
 import RxSwift
 
 class TodoListViewModel {
-    private let repository: TodoListCoreDataRepository
+    private let repository = TodoListCoreDataRepository()
     private let createdAt: String!
     private let disposeBag = DisposeBag()
     
     let todoList = BehaviorSubject<[TodoList]>(value: [])
     let todoListInfo = BehaviorSubject<TodoList>(value: TodoList())
     
-    init(repository: TodoListCoreDataRepository, createdAt: String!) {
-        self.repository = repository
+    init(createdAt: String!) {
         self.createdAt = createdAt
         
         fetchAllTodoList()

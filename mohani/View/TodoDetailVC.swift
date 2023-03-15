@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol TodoDetailVCDelegate: AnyObject {
     func onChangeTask(tasks: [Task])
@@ -15,17 +17,18 @@ class TodoDetailVC: UIViewController {
     enum Section { case main }
     
     weak var delegate: TodoDetailVCDelegate!
-    var todoInfo: TodoList? = nil
-    var tasks: [Task] = []
-    var currentDate = Date().toYearMonthDate()
-    var isTodoNew = true
+    private let disposeBag = DisposeBag()
+    private var taskVM: TaskViewModel!
+    private var todoListVM: TodoListViewModel!
+    
     var dataSource: UICollectionViewDiffableDataSource<Section, Task>!
     var prevSwipedCell: UICollectionViewCell!
+    var currentDate = Date().toYearMonthDate()
     
     let progressView = UIView()
     let tableTitleLabel = TitleLabel(color: Colors.black)
-    let addTaskButton = PlusButton(frame: .zero)
     var collectionView: UICollectionView!
+    let addTaskButton = PlusButton(frame: .zero)
     let emptyTaskView = TitleLabel(color: Colors.gray)
     var UIViews: [UIView] = []
     
@@ -43,14 +46,13 @@ class TodoDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureTodoInfo(date: currentDate)
-        configureTasks(date: currentDate)
+        configureCollectionView()
+        configureTaskVM()
+        configureTodoListVM()
         
         configureEmptyTaskView()
         configureViewController()
         configureProgressView()
-        configureCollectionView()
-        configureDataSource()
         configureAddTaskButton()
         configureUI()
     }
@@ -63,25 +65,20 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func configureTodoInfo(date: String) {
-        let todo = fetchTodoListInfo(date: currentDate)
+    private func configureTaskVM() {
+        self.taskVM = TaskViewModel(createdAt: currentDate)
         
-        guard todo.count > 0 else { return }
-        
-        todoInfo = todo[0]
-        isTodoNew = false
+        taskVM.tasks.bind(
+            to: collectionView.rx.items(cellIdentifier: TaskCell.reuseId, cellType: TaskCell.self)) { (row, task, cell) in
+                cell.setCell(task: task)
+                cell.delegate = self
+            }.disposed(by: disposeBag)
     }
-
     
-    private func configureTasks(date: String) {
-        guard !self.isTodoNew else { return }
-
-        let tasks = fetchTasks(date: currentDate)
-
-        guard tasks.count > 0 else { return }
-        
-        self.tasks = tasks
-        self.updateTasks()
+    
+    private func configureTodoListVM() {
+        todoListVM = TodoListViewModel(createdAt: currentDate)
+        todoListVM.fetchTodoListInfo(currentDate)
     }
     
     
@@ -95,9 +92,8 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureProgressView() {
-        let progressVC = ProgressVC(title: currentDate, tasks: tasks)
+        let progressVC = ProgressVC(currentDate: currentDate)
         add(childVC: progressVC, containerView: progressView)
-        self.delegate = progressVC
         
         let shadowColor = Colors.black.cgColor
         progressView.layer.shadowColor = shadowColor
@@ -123,17 +119,6 @@ class TodoDetailVC: UIViewController {
         } else {
             collectionView.backgroundView = nil
         }
-    }
-    
-    
-    private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, Task>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
-            cell.setCell(task: self.tasks[indexPath.row])
-            cell.delegate = self
-            
-            return cell
-        })
     }
     
     
@@ -230,7 +215,6 @@ extension TodoDetailVC: TaskInputVCDelegate {
         guard delegate != nil else { return }
         
         addTask(title: title, createdAt: currentDate)
-        configureTasks(date: currentDate)
         delegate.onChangeTask(tasks: tasks)
     }
 }
