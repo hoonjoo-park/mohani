@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 
 class TaskViewModel {
@@ -14,11 +15,11 @@ class TaskViewModel {
     private let disposeBag = DisposeBag()
     private let createdAt: String!
     
-    let tasks = BehaviorSubject<[Task]>(value: [])
+    let tasks = BehaviorRelay<[Task]>(value: [])
+    let errorRelay = PublishRelay<Error>()
     
     init(createdAt: String) {
         self.createdAt = createdAt
-        
         fetchTasks(createdAt)
     }
     
@@ -26,49 +27,60 @@ class TaskViewModel {
     func fetchTasks(_ createdAt: String) {
         repository.fetchTasks(createdAt: createdAt).subscribe(
             onSuccess: { [unowned self] tasks in
-                self.tasks.onNext(tasks)
+                self.tasks.accept(tasks)
             },
-            onFailure: { error in fatalError("error: \(error)") }
+            onFailure: { [unowned self] error in
+                self.errorRelay.accept(error)
+            }
         ).disposed(by: disposeBag)
     }
     
     
     func addTask(title: String, createdAt: String) {
-        repository.addTask(title: title, createdAt: createdAt).subscribe(
-            onCompleted: { [unowned self] in
-                do {
-                    var currentTasks = try tasks.value()
-                    
-                    let newTask = Task()
-                    newTask.title = title
-                    newTask.createdAt = createdAt
-                    newTask.isDone = false
-                    
+        let newTask = Task()
+        newTask.title = title
+        newTask.createdAt = createdAt
+        newTask.isDone = false
+        
+        repository.addTask(newTask)
+            .subscribe(
+                onCompleted: { [unowned self] in
+                    var currentTasks = self.tasks.value
                     currentTasks.append(newTask)
-                    self.tasks.onNext(currentTasks)
-                } catch {
-                    fatalError("error: \(error)")
+                    self.tasks.accept(currentTasks)
+                },
+                onError: { [unowned self] error in
+                    self.errorRelay.accept(error)
                 }
-            }) { error in
-                fatalError("error: \(error)")
-            }.disposed(by: disposeBag)
+            )
+            .disposed(by: disposeBag)
     }
     
     
     func deleteTask(_ task:Task) {
         repository.deleteTask(task).subscribe(
             onCompleted: { [unowned self] in
-                do {
-                    let currentTasks = try tasks.value()
-                    let filteredTasks = currentTasks.filter { currentTask in
-                        return currentTask != task
-                    }
-                    tasks.onNext(filteredTasks)
-                } catch {
-                    fatalError("error: \(error)")
+                let currentTasks = tasks.value
+                let filteredTasks = currentTasks.filter { currentTask in
+                    return currentTask != task
                 }
-            }) { error in
-                fatalError("error: \(error)")
+                tasks.accept(filteredTasks)
+            }) { [unowned self] error in
+                self.errorRelay.accept(error)
             }.disposed(by: disposeBag)
+    }
+    
+    
+    func toggleIsDone(_ task: Task) {
+        task.isDone.toggle()
+        
+        do {
+            try repository.context.save()
+        } catch {
+            errorRelay.accept(error)
+        }
+
+        let updatedTasks = tasks.value.sorted { return !$0.isDone && $1.isDone }
+        tasks.accept(updatedTasks)
     }
 }

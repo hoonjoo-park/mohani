@@ -9,14 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol TodoDetailVCDelegate: AnyObject {
-    func onChangeTask(tasks: [Task])
-}
-
 class TodoDetailVC: UIViewController {
     enum Section { case main }
     
-    weak var delegate: TodoDetailVCDelegate!
     private let disposeBag = DisposeBag()
     private var taskVM: TaskViewModel!
     private var todoListVM: TodoListViewModel!
@@ -65,6 +60,13 @@ class TodoDetailVC: UIViewController {
     }
     
     
+    private func configureCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createTaskCellLayout(view: view))
+        collectionView.backgroundColor = Colors.blueWhite
+        collectionView.register(TaskCell.self, forCellWithReuseIdentifier: TaskCell.reuseId)
+    }
+    
+    
     private func configureTaskVM() {
         self.taskVM = TaskViewModel(createdAt: currentDate)
         
@@ -73,6 +75,10 @@ class TodoDetailVC: UIViewController {
                 cell.setCell(task: task)
                 cell.delegate = self
             }.disposed(by: disposeBag)
+        
+        taskVM.tasks.subscribe(onNext: { [weak self] tasks in
+            self?.updateUIForEmptyTasks(tasks)
+        }).disposed(by: disposeBag)
     }
     
     
@@ -102,23 +108,19 @@ class TodoDetailVC: UIViewController {
         progressView.layer.shadowRadius = 10
     }
     
-    private func configureEmptyTaskView() {
-        emptyTaskView.text = "등록된 할 일이 없습니다."
-        emptyTaskView.textAlignment = .center
-    }
     
-    
-    private func configureCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createTaskCellLayout(view: view))
-        collectionView.delegate = self
-        collectionView.backgroundColor = Colors.blueWhite
-        collectionView.register(TaskCell.self, forCellWithReuseIdentifier: TaskCell.reuseId)
-        
+    private func updateUIForEmptyTasks(_ tasks: [Task]) {
         if tasks.count == 0 {
             collectionView.backgroundView = emptyTaskView
         } else {
             collectionView.backgroundView = nil
         }
+    }
+    
+    
+    private func configureEmptyTaskView() {
+        emptyTaskView.text = "등록된 할 일이 없습니다."
+        emptyTaskView.textAlignment = .center
     }
     
     
@@ -129,10 +131,9 @@ class TodoDetailVC: UIViewController {
     
     private func configureUI() {
         let padding: CGFloat = 20
+        
         view.addSubviews(progressView ,tableTitleLabel, collectionView, addTaskButton)
-        
         tableTitleLabel.text = "Todo"
-        
         UIViews = [progressView, tableTitleLabel, collectionView, addTaskButton]
         
         for view in UIViews {
@@ -167,23 +168,6 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    private func updateTasks() {
-        sortTasksByIsDone()
-        
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
-        
-        snapshot.appendSections([.main])
-        snapshot.appendItems(self.tasks)
-
-        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
-    }
-    
-    
-    private func sortTasksByIsDone() {
-        tasks.sort { return !$0.isDone && $1.isDone }
-    }
-    
-    
     @objc func onTappedListButton() {
         let todoListVC = TodoListVC()
         navigationController?.pushViewControllerFromLeftToRight(viewController: todoListVC)
@@ -207,15 +191,9 @@ class TodoDetailVC: UIViewController {
 }
 
 
-extension TodoDetailVC: UICollectionViewDelegate {}
-
-
 extension TodoDetailVC: TaskInputVCDelegate {
     func onAddTask(title: String) {
-        guard delegate != nil else { return }
-        
-        addTask(title: title, createdAt: currentDate)
-        delegate.onChangeTask(tasks: tasks)
+        taskVM.addTask(title: title, createdAt: currentDate)
     }
 }
 
@@ -229,28 +207,17 @@ extension TodoDetailVC: TaskCellDelegate {
     
     
     func onToggleIsDone(task: Task) {
-        guard delegate != nil else { return }
-        
-        saveContext()
-        delegate.onChangeTask(tasks: tasks)
-        sortTasksByIsDone()
-        updateTasks()
+        taskVM.toggleIsDone(task)
     }
     
     
     func onTapDeleteTask(task: Task) {
-        guard delegate != nil else { return }
-        
         let alert = UIAlertController(title: "삭제", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .default) { _ in return })
-        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { action in
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { [weak self] action in
             // MARK: DB에서 삭제
-            self.removeTask(task: task)
-            // MARK: TableView 및 todoList 배열에서 삭제
-            self.tasks.removeAll { $0 == task }
-            self.updateTasks()
-
-            self.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
+            self?.taskVM.deleteTask(task)
+            self?.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
         })
         
         self.present(alert, animated: true, completion: nil)
