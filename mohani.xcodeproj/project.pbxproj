@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A6BE7FABDCB0D1F03B93158 /* Pods_mohani.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30B1187E7DE67625D2F11917 /* Pods_mohani.framework */; };
 		CB0264B4293613B200650F51 /* mohani.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CB0264B2293613B200650F51 /* mohani.xcdatamodeld */; };
 		CB0264B929361B1E00650F51 /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0264B529361B1E00650F51 /* Task+CoreDataClass.swift */; };
 		CB0264BB29361B1E00650F51 /* TodoList+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0264B729361B1E00650F51 /* TodoList+CoreDataClass.swift */; };
@@ -37,6 +38,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		30B1187E7DE67625D2F11917 /* Pods_mohani.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mohani.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		79516AF996127B0FABED6694 /* Pods-mohani.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mohani.debug.xcconfig"; path = "Target Support Files/Pods-mohani/Pods-mohani.debug.xcconfig"; sourceTree = "<group>"; };
+		A0DEE7E018EDE00006C833CB /* Pods-mohani.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mohani.release.xcconfig"; path = "Target Support Files/Pods-mohani/Pods-mohani.release.xcconfig"; sourceTree = "<group>"; };
 		CB0264B3293613B200650F51 /* mohani.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mohani.xcdatamodel; sourceTree = "<group>"; };
 		CB0264B529361B1E00650F51 /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CB0264B729361B1E00650F51 /* TodoList+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodoList+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -73,12 +77,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A6BE7FABDCB0D1F03B93158 /* Pods_mohani.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5142192262024164299F7E52 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				79516AF996127B0FABED6694 /* Pods-mohani.debug.xcconfig */,
+				A0DEE7E018EDE00006C833CB /* Pods-mohani.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		A99CAC1B0E5C991FE2F24A61 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				30B1187E7DE67625D2F11917 /* Pods_mohani.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CB0264BD29361D2600650F51 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +164,8 @@
 			children = (
 				CBC281DD292A82C600B2C144 /* mohani */,
 				CBC281DC292A82C600B2C144 /* Products */,
+				5142192262024164299F7E52 /* Pods */,
+				A99CAC1B0E5C991FE2F24A61 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,9 +210,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CBC281F2292A82C800B2C144 /* Build configuration list for PBXNativeTarget "mohani" */;
 			buildPhases = (
+				9BA3B3C2A026DB82C9FDC7B7 /* [CP] Check Pods Manifest.lock */,
 				CBC281D7292A82C600B2C144 /* Sources */,
 				CBC281D8292A82C600B2C144 /* Frameworks */,
 				CBC281D9292A82C600B2C144 /* Resources */,
+				F840EA08F902B8E64039D393 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -242,6 +269,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9BA3B3C2A026DB82C9FDC7B7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mohani-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F840EA08F902B8E64039D393 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-mohani/Pods-mohani-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-mohani/Pods-mohani-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-mohani/Pods-mohani-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CBC281D7292A82C600B2C144 /* Sources */ = {
@@ -395,6 +464,7 @@
 		};
 		CBC281F3292A82C800B2C144 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79516AF996127B0FABED6694 /* Pods-mohani.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -423,6 +493,7 @@
 		};
 		CBC281F4292A82C800B2C144 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0DEE7E018EDE00006C833CB /* Pods-mohani.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
