@@ -10,6 +10,4 @@ import Foundation
 import CoreData
 
 @objc(TodoList)
-public class TodoList: NSManagedObject {
-
-}
+public class TodoList: NSManagedObject {}

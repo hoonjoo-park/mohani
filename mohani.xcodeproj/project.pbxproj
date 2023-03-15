@@ -16,6 +16,10 @@
 		CB0264C52936865100650F51 /* ProgressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0264C42936865100650F51 /* ProgressVC.swift */; };
 		CB0264C729368A0F00650F51 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0264C629368A0F00650F51 /* UIView+Ext.swift */; };
 		CB0BF501293CAD2F00F86728 /* TaskProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BF500293CAD2F00F86728 /* TaskProgressView.swift */; };
+		CB152F7729C1D8D8006D91F1 /* TaskCoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB152F7629C1D8D8006D91F1 /* TaskCoreDataRepository.swift */; };
+		CB152F7929C1D8E9006D91F1 /* TodoListCoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB152F7829C1D8E9006D91F1 /* TodoListCoreDataRepository.swift */; };
+		CB152F7B29C1EDFF006D91F1 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB152F7A29C1EDFF006D91F1 /* TaskViewModel.swift */; };
+		CB152F7D29C1EE0A006D91F1 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB152F7C29C1EE0A006D91F1 /* TodoListViewModel.swift */; };
 		CB609263293610E9008E79F9 /* TodoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB609262293610E9008E79F9 /* TodoListVC.swift */; };
 		CB6092652936110F008E79F9 /* TodoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6092642936110F008E79F9 /* TodoDetailVC.swift */; };
 		CB6CC85029374FBA00134993 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6CC84F29374FBA00134993 /* UIColor+Ext.swift */; };
@@ -49,6 +53,10 @@
 		CB0264C42936865100650F51 /* ProgressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressVC.swift; sourceTree = "<group>"; };
 		CB0264C629368A0F00650F51 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		CB0BF500293CAD2F00F86728 /* TaskProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProgressView.swift; sourceTree = "<group>"; };
+		CB152F7629C1D8D8006D91F1 /* TaskCoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCoreDataRepository.swift; sourceTree = "<group>"; };
+		CB152F7829C1D8E9006D91F1 /* TodoListCoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListCoreDataRepository.swift; sourceTree = "<group>"; };
+		CB152F7A29C1EDFF006D91F1 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		CB152F7C29C1EE0A006D91F1 /* TodoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
 		CB609262293610E9008E79F9 /* TodoListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListVC.swift; sourceTree = "<group>"; };
 		CB6092642936110F008E79F9 /* TodoDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailVC.swift; sourceTree = "<group>"; };
 		CB6CC84F29374FBA00134993 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
@@ -62,7 +70,7 @@
 		CB8BA7D02939E93B0088D16B /* UITableView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
 		CB8D2B482938A9BA005D6B43 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		CBA8B73F294A188500EE2CA1 /* TodoListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListCell.swift; sourceTree = "<group>"; };
-		CBBD4C412940B0B4002FF4F0 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
+		CBBD4C412940B0B4002FF4F0 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ToastMessageView.swift; path = ../Controller/ToastMessageView.swift; sourceTree = "<group>"; };
 		CBC281DB292A82C600B2C144 /* mohani.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mohani.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBC281DE292A82C600B2C144 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBC281E0292A82C600B2C144 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,7 +98,6 @@
 				79516AF996127B0FABED6694 /* Pods-mohani.debug.xcconfig */,
 				A0DEE7E018EDE00006C833CB /* Pods-mohani.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -115,7 +122,25 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		CB60925F29360FE3008E79F9 /* Controller */ = {
+		CB152F7429C1CF7B006D91F1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CB152F7A29C1EDFF006D91F1 /* TaskViewModel.swift */,
+				CB152F7C29C1EE0A006D91F1 /* TodoListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		CB152F7529C1D8BB006D91F1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CB152F7629C1D8D8006D91F1 /* TaskCoreDataRepository.swift */,
+				CB152F7829C1D8E9006D91F1 /* TodoListCoreDataRepository.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CB60926029360FEC008E79F9 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				CB609262293610E9008E79F9 /* TodoListVC.swift */,
@@ -123,13 +148,6 @@
 				CB0264C42936865100650F51 /* ProgressVC.swift */,
 				CB6CC85C29377A9800134993 /* TaskInputVC.swift */,
 				CBBD4C412940B0B4002FF4F0 /* ToastMessageView.swift */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		CB60926029360FEC008E79F9 /* View */ = {
-			isa = PBXGroup;
-			children = (
 				CB0264C22936808D00650F51 /* TaskCell.swift */,
 				CBA8B73F294A188500EE2CA1 /* TodoListCell.swift */,
 				CB6CC8542937597800134993 /* TitleLabel.swift */,
@@ -180,11 +198,12 @@
 		CBC281DD292A82C600B2C144 /* mohani */ = {
 			isa = PBXGroup;
 			children = (
+				CB152F7529C1D8BB006D91F1 /* Data */,
+				CB152F7429C1CF7B006D91F1 /* ViewModel */,
 				CBC281F5292A84B700B2C144 /* App */,
 				CB60926129360FEF008E79F9 /* Model */,
 				CB0264BD29361D2600650F51 /* Extension */,
 				CB60926029360FEC008E79F9 /* View */,
-				CB60925F29360FE3008E79F9 /* Controller */,
 				CB6CC8512937508200134993 /* Util */,
 			);
 			path = mohani;
@@ -318,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB6CC853293750AB00134993 /* UIHelper.swift in Sources */,
+				CB152F7B29C1EDFF006D91F1 /* TaskViewModel.swift in Sources */,
 				CB609263293610E9008E79F9 /* TodoListVC.swift in Sources */,
 				CB8D2B492938A9BA005D6B43 /* UIViewController+Ext.swift in Sources */,
 				CB0264C729368A0F00650F51 /* UIView+Ext.swift in Sources */,
@@ -326,12 +346,14 @@
 				CBE999F6294B63EC00232222 /* UINavigationController+Ext.swift in Sources */,
 				CBC281DF292A82C600B2C144 /* AppDelegate.swift in Sources */,
 				CBA8B740294A188500EE2CA1 /* TodoListCell.swift in Sources */,
+				CB152F7729C1D8D8006D91F1 /* TaskCoreDataRepository.swift in Sources */,
 				CB0264C1293644C200650F51 /* Date+Ext.swift in Sources */,
 				CB6CC85B2937769700134993 /* PlusButton.swift in Sources */,
 				CBC281E1292A82C600B2C144 /* SceneDelegate.swift in Sources */,
 				CB0BF501293CAD2F00F86728 /* TaskProgressView.swift in Sources */,
 				CB6CC8612937855000134993 /* AddTaskButton.swift in Sources */,
 				CB6092652936110F008E79F9 /* TodoDetailVC.swift in Sources */,
+				CB152F7929C1D8E9006D91F1 /* TodoListCoreDataRepository.swift in Sources */,
 				CB0264BB29361B1E00650F51 /* TodoList+CoreDataClass.swift in Sources */,
 				CB0264C32936808D00650F51 /* TaskCell.swift in Sources */,
 				CB6CC85029374FBA00134993 /* UIColor+Ext.swift in Sources */,
@@ -339,6 +361,7 @@
 				CB6CC85F293782E200134993 /* TaskTextField.swift in Sources */,
 				CB6CC8572937598800134993 /* BodyLabel.swift in Sources */,
 				CBBD4C422940B0B4002FF4F0 /* ToastMessageView.swift in Sources */,
+				CB152F7D29C1EE0A006D91F1 /* TodoListViewModel.swift in Sources */,
 				CB8BA7D12939E93B0088D16B /* UITableView+Ext.swift in Sources */,
 				CB0264B4293613B200650F51 /* mohani.xcdatamodeld in Sources */,
 				CB0264C52936865100650F51 /* ProgressVC.swift in Sources */,
