@@ -37,19 +37,14 @@ class TaskViewModel {
     
     
     func addTask(title: String, createdAt: String) {
-        let newTask = Task()
-        newTask.title = title
-        newTask.createdAt = createdAt
-        newTask.isDone = false
-        
-        repository.addTask(newTask)
+        repository.addTask(title, createdAt)
             .subscribe(
-                onCompleted: { [unowned self] in
+                onSuccess: { [unowned self] newTask in
                     var currentTasks = self.tasks.value
                     currentTasks.append(newTask)
                     self.tasks.accept(currentTasks)
                 },
-                onError: { [unowned self] error in
+                onFailure: { [unowned self] error in
                     self.errorRelay.accept(error)
                 }
             )
