@@ -69,5 +69,4 @@ class TaskCoreDataRepository: TaskCoreDataRepositoryProtocol {
             return Disposables.create()
         }
     }
-    
 }

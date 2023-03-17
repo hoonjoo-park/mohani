@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 class TodoListViewModel {
     private let repository = TodoListCoreDataRepository()
@@ -15,6 +16,7 @@ class TodoListViewModel {
     
     let todoList = BehaviorSubject<[TodoList]>(value: [])
     let todoListInfo = BehaviorSubject<TodoList>(value: TodoList())
+    let errorRelay = PublishRelay<Error>()
     
     init(createdAt: String!) {
         self.createdAt = createdAt
@@ -28,9 +30,10 @@ class TodoListViewModel {
             onSuccess: { [unowned self] todoLists in
                 self.todoList.onNext(todoLists)
             },
-            onFailure: { error in
-                fatalError("error: \(error)")
-            }).disposed(by: disposeBag)
+            onFailure: { [unowned self] error in
+                self.errorRelay.accept(error)
+            }
+        ).disposed(by: disposeBag)
     }
     
     
@@ -39,8 +42,9 @@ class TodoListViewModel {
             onSuccess: { [unowned self] todoList in
                 self.todoListInfo.onNext(todoList[0])
             },
-            onFailure: { error in
-                fatalError("error: \(error)") }
+            onFailure: { [unowned self] error in
+                self.errorRelay.accept(error)
+            }
         ).disposed(by: disposeBag)
     }
     
@@ -53,11 +57,11 @@ class TodoListViewModel {
                     let filteredTodoList = currentTodoList.filter { return $0 != todoList }
                     self.todoList.onNext(filteredTodoList)
                 } catch {
-                    fatalError("error: \(error)")
+                    self.errorRelay.accept(error)
                 }
             },
-            onError: { error in
-                fatalError("error: \(error)")
+            onError: { [unowned self] error in
+                self.errorRelay.accept(error)
             }
         ).disposed(by: disposeBag)
     }
