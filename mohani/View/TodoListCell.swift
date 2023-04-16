@@ -31,7 +31,9 @@ class TodoListCell: UITableViewCell {
     }
     
     
-    func setCell(todoList: TodoList) { listLabel.text = todoList.createdAt }
+    func setCell(todoList: TodoList) {
+        listLabel.text = todoList.createdAt
+    }
     
     
     private func configureUI() {

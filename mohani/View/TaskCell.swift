@@ -10,8 +10,6 @@ import UIKit
 protocol TaskCellDelegate: AnyObject {
     func onToggleIsDone(task: Task)
     func onTapDeleteTask(task: Task)
-    func onSwipeCell()
-    
     var lastSwipedCell: UICollectionViewCell { get set }
 }
 
@@ -109,8 +107,7 @@ class TaskCell: UICollectionViewCell {
     
     func setCell(task: Task) {
         self.task = task
-        
-        setCellData()
+        updateCellData()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(toggleCheckBox))
         checkBoxButton.addGestureRecognizer(gestureRecognizer)
@@ -118,7 +115,7 @@ class TaskCell: UICollectionViewCell {
     }
     
     
-    private func setCellData() {
+    private func updateCellData() {
         if task.isDone {
             checkBoxButton.image = UIImage(systemName: "checkmark.circle.fill")
             addStrikethrough()
@@ -145,10 +142,8 @@ class TaskCell: UICollectionViewCell {
     
     
     @objc func toggleCheckBox() {
-        self.task.isDone = !self.task.isDone
-        
         delegate?.onToggleIsDone(task: task)
-        setCellData()
+        updateCellData()
     }
     
     
@@ -164,10 +159,6 @@ class TaskCell: UICollectionViewCell {
         let threshold:CGFloat = -40
         
         switch gesture.state {
-            
-        case .began:
-            delegate.onSwipeCell()
-        
         case .changed:
             DispatchQueue.main.async {
                 self.cellView.transform = CGAffineTransform(translationX: translationX + self.prevTranslateX, y: 0)
@@ -178,7 +169,6 @@ class TaskCell: UICollectionViewCell {
                     self.taskDeleteButton.alpha = -(translationX + self.prevTranslateX) / 50
                 }
             }
-        
         case .cancelled, .ended:
             guard translationX > threshold else {
                 self.prevTranslateX = -50

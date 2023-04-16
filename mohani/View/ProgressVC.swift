@@ -1,10 +1,3 @@
-//
-//  ProgressVC.swift
-//  mohani
-//
-//  Created by Hoonjoo Park on 2022/11/30.
-//
-
 import UIKit
 import RxSwift
 import RxCocoa
@@ -12,7 +5,6 @@ import RxCocoa
 class ProgressVC: UIViewController {
     private let disposeBag = DisposeBag()
     var taskVM: TaskViewModel!
-    var currentDate: String!
     
     let titleLabel = TitleLabel(color: Colors.black)
     let progressLabel = TitleLabel(color: Colors.gray)
@@ -31,23 +23,26 @@ class ProgressVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViewController()
         configureUI()
         
         taskVM.tasks
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] tasks in
+            .map { tasks -> (Int, Int) in
                 let totalTaskCount = tasks.count
-                let doneTaskCount = (tasks.filter { $0.isDone == true }).count
-                
+                let doneTaskCount = tasks.filter { $0.isDone }.count
+                return (totalTaskCount, doneTaskCount)
+            }
+            .asDriver(onErrorJustReturn: (0, 0))
+            .drive(onNext: { [unowned self] totalTaskCount, doneTaskCount in
                 self.configureProgressLabel(totalTaskCount, doneTaskCount)
                 self.setProgressValue(totalTaskCount, doneTaskCount)
-            }).disposed(by: disposeBag)
-        
+            })
+            .disposed(by: disposeBag)
     }
     
     

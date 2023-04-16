@@ -49,6 +49,7 @@ class TodoDetailVC: UIViewController {
         configureViewController()
         configureProgressView()
         configureAddTaskButton()
+        
         configureUI()
     }
     
@@ -89,7 +90,9 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureViewController() {
-        let listButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(onTappedListButton))
+        let listButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"),
+                                         style: .plain, target: self,
+                                         action: #selector(onTappedTodoListHeaderButton))
         
         view.backgroundColor = Colors.blueWhite
         navigationItem.leftBarButtonItem = listButton
@@ -168,7 +171,7 @@ class TodoDetailVC: UIViewController {
     }
     
     
-    @objc func onTappedListButton() {
+    @objc func onTappedTodoListHeaderButton() {
         let todoListVC = TodoListVC()
         navigationController?.pushViewControllerFromLeftToRight(viewController: todoListVC)
     }
@@ -215,27 +218,10 @@ extension TodoDetailVC: TaskCellDelegate {
         let alert = UIAlertController(title: "삭제", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .default) { _ in return })
         alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { [weak self] action in
-            // MARK: DB에서 삭제
             self?.taskVM.deleteTask(task)
             self?.showToastMessage(message: "삭제가 완료되었습니다!", status: .success, withKeyboard: false)
         })
         
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    func onSwipeCell() {
-        guard let cell = prevSwipedCell else { return }
-        
-        let cellContainer = cell.subviews[0]
-        let deleteButton = cell.subviews[1]
-        
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-                cellContainer.transform = .identity
-            }
-
-            deleteButton.alpha = 0
-        }
     }
 }
