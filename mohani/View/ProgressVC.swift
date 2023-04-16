@@ -4,18 +4,26 @@ import RxCocoa
 
 class ProgressVC: UIViewController {
     private let disposeBag = DisposeBag()
-    var taskVM: TaskViewModel!
     
     let titleLabel = TitleLabel(color: Colors.black)
     let progressLabel = TitleLabel(color: Colors.gray)
     let progressBar = TaskProgressView(frame: .zero)
     
     
-    init(currentDate: String) {
+    init(_ taskVM: TaskViewModel, _ createdAt: String) {
         super.init(nibName: nil, bundle: nil)
         
-        taskVM = TaskViewModel(createdAt: currentDate)
-        titleLabel.text = currentDate
+        titleLabel.text = createdAt
+        
+        taskVM.tasks
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] tasks in
+                let totalTaskCount = tasks.count
+                let doneTaskCount = (tasks.filter { $0.isDone == true }).count
+                
+                self.configureProgressLabel(totalTaskCount, doneTaskCount)
+                self.setProgressValue(totalTaskCount, doneTaskCount)
+            }).disposed(by: disposeBag)
     }
     
     
@@ -29,20 +37,6 @@ class ProgressVC: UIViewController {
         
         configureViewController()
         configureUI()
-        
-        taskVM.tasks
-            .observe(on: MainScheduler.instance)
-            .map { tasks -> (Int, Int) in
-                let totalTaskCount = tasks.count
-                let doneTaskCount = tasks.filter { $0.isDone }.count
-                return (totalTaskCount, doneTaskCount)
-            }
-            .asDriver(onErrorJustReturn: (0, 0))
-            .drive(onNext: { [unowned self] totalTaskCount, doneTaskCount in
-                self.configureProgressLabel(totalTaskCount, doneTaskCount)
-                self.setProgressValue(totalTaskCount, doneTaskCount)
-            })
-            .disposed(by: disposeBag)
     }
     
     

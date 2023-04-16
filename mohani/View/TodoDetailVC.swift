@@ -1,10 +1,3 @@
-//
-//  TodoDetailVC.swift
-//  mohani
-//
-//  Created by Hoonjoo Park on 2022/11/29.
-//
-
 import UIKit
 import RxSwift
 import RxCocoa
@@ -101,7 +94,7 @@ class TodoDetailVC: UIViewController {
     
     
     private func configureProgressView() {
-        let progressVC = ProgressVC(currentDate: currentDate)
+        let progressVC = ProgressVC(taskVM, currentDate)
         add(childVC: progressVC, containerView: progressView)
         
         let shadowColor = Colors.black.cgColor
