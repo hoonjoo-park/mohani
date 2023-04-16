@@ -35,6 +35,7 @@ class TodoDetailVC: UIViewController {
         super.viewDidLoad()
         
         configureCollectionView()
+        configureDataSource()
         configureTaskVM()
         configureTodoListVM()
         
@@ -64,15 +65,12 @@ class TodoDetailVC: UIViewController {
     private func configureTaskVM() {
         self.taskVM = TaskViewModel(createdAt: currentDate)
         
-        taskVM.tasks.bind(
-            to: collectionView.rx.items(cellIdentifier: TaskCell.reuseId, cellType: TaskCell.self)) { (row, task, cell) in
-                cell.setCell(task: task)
-                cell.delegate = self
-            }.disposed(by: disposeBag)
-        
-        taskVM.tasks.subscribe(onNext: { [weak self] tasks in
-            self?.updateUIForEmptyTasks(tasks)
-        }).disposed(by: disposeBag)
+        taskVM.tasks
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] tasks in
+                self?.updateUIForEmptyTasks(tasks)
+                self?.applySnapshot(tasks: tasks)
+            }).disposed(by: disposeBag)
     }
     
     
@@ -90,6 +88,24 @@ class TodoDetailVC: UIViewController {
         view.backgroundColor = Colors.blueWhite
         navigationItem.leftBarButtonItem = listButton
         navigationItem.leftBarButtonItem?.tintColor = Colors.black
+    }
+    
+    
+    private func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Section, Task>(collectionView: collectionView) { (collectionView, indexPath, task) -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCell.reuseId, for: indexPath) as! TaskCell
+            cell.setCell(task: task)
+            cell.delegate = self
+            return cell
+        }
+    }
+    
+    
+    private func applySnapshot(tasks: [Task]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(tasks)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     
